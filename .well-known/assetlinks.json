@@ -3,6 +3,6 @@
   "target": {
     "namespace": "android_app",
     "package_name": "io.github.caseth8.tpb",
-    "sha256_cert_fingerprints": ["PENDIENTE"]
+    "sha256_cert_fingerprints": ["26:D2:51:33:BA:47:25:DB:3A:1A:8A:42:EA:37:FE:19:BD:D8:DD:2C:40:CF:0F:6B:BF:90:8B:2D:4A:A9:48:C0"]
   }
 }]
