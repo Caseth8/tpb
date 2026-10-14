@@ -1223,12 +1223,14 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     try{audioCtxLocal=new AC({latencyHint:'playback'});}catch(e){audioCtxLocal=new AC();}
     audioCtx=audioCtxLocal;
 
-    audioLimiter=audioCtx.createDynamicsCompressor();
-    audioLimiter.threshold.value=-1.5;
-    audioLimiter.knee.value=0;
-    audioLimiter.ratio.value=20;
-    audioLimiter.attack.value=0.002;
-    audioLimiter.release.value=0.15;
+    audioLimiter=audioCtx.createWaveShaper();
+    var clipCurve=new Float32Array(4096);
+    for(var ci=0;ci<4096;ci++){
+      var cx=(ci/4095)*2-1;
+      clipCurve[ci]=Math.tanh(cx*1.4)/Math.tanh(1.4);
+    }
+    audioLimiter.curve=clipCurve;
+    audioLimiter.oversample='4x';
     audioLimiter.connect(audioCtx.destination);
 
     audioMaster=audioCtx.createGain();
