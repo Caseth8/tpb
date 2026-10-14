@@ -1,4 +1,4 @@
-const CACHE = 'tpb-v3';
+const CACHE = 'tpb-v4';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {

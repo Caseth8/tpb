@@ -710,11 +710,11 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   const DESDOBLE_STAGGER = 100;
   const PHASE_C_START  = PHASE_B_START + 5*DESDOBLE_STAGGER + DESDOBLE_MS;
 
-  const PRODUCE_BUS_GAIN    = 1.80;
+  const PRODUCE_BUS_GAIN    = 1.00;
   const KEYS_REVERB_SEND    = 0.55;
   const PRODUCE_REVERB_SEND = 0.25;
   const REVERB_WET          = 0.32;
-  const MASTER_GAIN         = 2.2;
+  const MASTER_GAIN         = 1.0;
   const VOL_STEP            = 5;
   const VOL_STEP_MS_LONGPRESS = 400;
 
@@ -1223,14 +1223,8 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     try{audioCtxLocal=new AC({latencyHint:'playback'});}catch(e){audioCtxLocal=new AC();}
     audioCtx=audioCtxLocal;
 
-    audioLimiter=audioCtx.createWaveShaper();
-    var clipCurve=new Float32Array(4096);
-    for(var ci=0;ci<4096;ci++){
-      var cx=(ci/4095)*2-1;
-      clipCurve[ci]=Math.tanh(cx*1.4)/Math.tanh(1.4);
-    }
-    audioLimiter.curve=clipCurve;
-    audioLimiter.oversample='4x';
+    audioLimiter=audioCtx.createGain();
+    audioLimiter.gain.value=1.0;
     audioLimiter.connect(audioCtx.destination);
 
     audioMaster=audioCtx.createGain();
@@ -1243,7 +1237,13 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
 
     audioProduceGain=audioCtx.createGain();
     audioProduceGain.gain.value=state.volumeProduce;
-    audioProduceGain.connect(audioMaster);
+
+    var produceFilter=audioCtx.createBiquadFilter();
+    produceFilter.type='lowpass';
+    produceFilter.frequency.value=5000;
+    produceFilter.Q.value=0.5;
+    audioProduceGain.connect(produceFilter);
+    produceFilter.connect(audioMaster);
 
     reverbIn=audioCtx.createGain();
     reverbOut=audioCtx.createGain();
@@ -1277,6 +1277,10 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     for(var i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
 
     if(audioCtx.state==='suspended'){try{audioCtx.resume();}catch(e){}}
+
+    try {
+      setTimeout(function(){ renderAllSounds(); }, 200);
+    } catch(e){}
   }
 
   function audioBus(){var g=audioCtx.createGain();g.gain.value=1;g.connect(audioKeysGain);return g;}
@@ -1319,7 +1323,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     osc.type = spec.type || 'sine';
     osc.frequency.setValueAtTime(spec.f0, t);
     if(spec.f1 !== undefined){
-      osc.frequency.exponentialRampToValueAtTime(spec.f1, t + spec.dur);
+      osc.frequency.exponentialRampToValueAtTime(spec.f1, t + spec.dur * 0.9);
     }
     if(spec.detune !== undefined) osc.detune.value = spec.detune;
 
@@ -1333,13 +1337,15 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       node = filt;
     }
 
-    var attack = spec.attack || 0.005;
+    var attack = spec.attack || 0.020;
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(spec.gain, t + attack);
     if(spec.hold){
       g.gain.setValueAtTime(spec.gain, t + spec.hold);
     }
-    g.gain.exponentialRampToValueAtTime(0.0001, t + spec.dur);
+    var decayEnd = t + spec.dur - 0.012;
+    g.gain.exponentialRampToValueAtTime(0.006, decayEnd);
+    g.gain.linearRampToValueAtTime(0, t + spec.dur);
 
     node.connect(g).connect(produceBus());
     osc.start(t);
@@ -1418,27 +1424,30 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   function playTranceGate(t){
     var notes = [220, 330, 440];
     notes.forEach(function(f, idx){
-      [-5, 5].forEach(function(cents){
+      [-5, 5].forEach(function(cents, di){
         var osc = audioCtx.createOscillator();
         var g = audioCtx.createGain();
         osc.type = 'sine';
         osc.frequency.value = f;
         osc.detune.value = cents;
         var pulses = 16;
-        g.gain.setValueAtTime(0, t);
+        var offset = di * 0.0025 + idx * 0.001;
+        g.gain.setValueAtTime(0, t + offset);
+        var peak = 0.06 - idx * 0.015;
+        var floor = 0.018 + idx * 0.002;
         for(var i = 0; i < pulses; i++){
-          var start = t + i * 0.13;
-          g.gain.linearRampToValueAtTime(0.06 - idx * 0.015, start + 0.005);
-          g.gain.linearRampToValueAtTime(0.005, start + 0.10);
-          g.gain.setValueAtTime(0.001, start + 0.125);
+          var start = t + offset + i * 0.13;
+          g.gain.linearRampToValueAtTime(peak, start + 0.015);
+          g.gain.linearRampToValueAtTime(floor, start + 0.10);
+          g.gain.setValueAtTime(floor + 0.005, start + 0.128);
         }
-        g.gain.linearRampToValueAtTime(0, t + 2.10);
+        g.gain.linearRampToValueAtTime(0, t + 2.12);
         osc.connect(g).connect(produceBus());
-        osc.start(t);
+        osc.start(t + offset);
         osc.stop(t + 2.15);
       });
     });
-    voice(t, { f0:110, dur:2.20, gain:0.05, attack:0.20, hold:1.80 });
+    voice(t, { f0:110, dur:2.20, gain:0.07, attack:0.20, hold:1.80 });
   }
 
   function playThrob(t){
@@ -1452,11 +1461,11 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       g.gain.setValueAtTime(0, t);
       for(var i = 0; i < pulses; i++){
         var start = t + i * 0.28;
-        g.gain.linearRampToValueAtTime(baseGain, start + 0.010);
-        g.gain.linearRampToValueAtTime(baseGain * 0.15, start + 0.20);
-        g.gain.linearRampToValueAtTime(0.001, start + 0.26);
+        g.gain.linearRampToValueAtTime(baseGain, start + 0.020);
+        g.gain.linearRampToValueAtTime(baseGain * 0.25, start + 0.20);
+        g.gain.linearRampToValueAtTime(baseGain * 0.12, start + 0.26);
       }
-      g.gain.linearRampToValueAtTime(0, t + 1.80);
+      g.gain.linearRampToValueAtTime(0, t + 1.82);
       osc.connect(g).connect(produceBus());
       osc.start(t);
       osc.stop(t + 1.85);
@@ -1477,8 +1486,9 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       osc.detune.value = cents;
       g.gain.setValueAtTime(0, t);
       g.gain.linearRampToValueAtTime(opts.gain / 2, t + (opts.atk || 0.5));
-      g.gain.setValueAtTime(opts.gain / 2, t + dur * 0.7);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      g.gain.setValueAtTime(opts.gain / 2, t + dur * 0.70);
+      g.gain.linearRampToValueAtTime(0.005, t + dur - 0.010);
+      g.gain.linearRampToValueAtTime(0, t + dur);
       osc.connect(g).connect(pan).connect(produceBus());
       osc.start(t);
       osc.stop(t + dur + 0.05);
@@ -1494,8 +1504,9 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     osc.type = 'triangle';
     osc.frequency.value = opts.f;
     g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(opts.gain, t + 0.008);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    g.gain.linearRampToValueAtTime(opts.gain, t + 0.015);
+    g.gain.exponentialRampToValueAtTime(0.004, t + dur - 0.008);
+    g.gain.linearRampToValueAtTime(0, t + dur);
     osc.connect(g).connect(pan).connect(produceBus());
     osc.start(t);
     osc.stop(t + dur + 0.05);
@@ -1510,13 +1521,14 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       mod.type = 'sine';
       mod.frequency.value = opts.f * 1.41 * 2.0;
       modG.gain.setValueAtTime(0, t);
-      modG.gain.linearRampToValueAtTime(opts.f * opts.fm, t + 0.004);
-      modG.gain.exponentialRampToValueAtTime(opts.f * 0.15, t + 0.05);
+      modG.gain.linearRampToValueAtTime(opts.f * opts.fm * 1.0, t + 0.008);
+      modG.gain.exponentialRampToValueAtTime(opts.f * 0.10, t + 0.05);
       mod.connect(modG).connect(car.frequency);
 
       fg.gain.setValueAtTime(0, t);
-      fg.gain.linearRampToValueAtTime(0.035, t + 0.004);
-      fg.gain.exponentialRampToValueAtTime(0.0001, t + 0.055);
+      fg.gain.linearRampToValueAtTime(0.045, t + 0.008);
+      fg.gain.exponentialRampToValueAtTime(0.004, t + 0.05);
+      fg.gain.linearRampToValueAtTime(0, t + 0.062);
       car.connect(fg).connect(pan);
       mod.start(t);
       car.start(t);
@@ -1525,30 +1537,107 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     }
   }
   function playMechAssembly(t){
-    padSwell(t, {f0:165, f1:330, dur:2.4, gain:0.16, atk:0.50});
+    padSwell(t, {f0:165, f1:330, dur:2.4, gain:0.08, atk:0.50});
     [330,392,440,523,587,659].forEach(function(f,i){
-      mechStep(t + i*0.12, {f:f, gain:0.11, dur:0.10, fm:2.0, pan:(i%2===0)?-0.6:0.6});
+      mechStep(t + i*0.12, {f:f, gain:0.22, dur:0.10, fm:2.0, pan:(i%2===0)?-0.6:0.6});
     });
-    padSwell(t+0.60, {f0:110, f1:165, dur:2.2, gain:0.14, atk:0.35});
+    padSwell(t+0.60, {f0:110, f1:165, dur:2.2, gain:0.07, atk:0.35});
     [262,294,330,370,415,466,523,587,659,740].forEach(function(f,i){
-      mechStep(t + 0.70 + i*0.09, {f:f, gain:0.075, dur:0.07, fm:1.5, pan:(i%2===0)?-0.7:0.7});
+      mechStep(t + 0.70 + i*0.09, {f:f, gain:0.15, dur:0.07, fm:1.5, pan:(i%2===0)?-0.7:0.7});
     });
   }
 
   function playSoundKey(key){
     if(!audioCtx)return;
-    var t0=audioCtx.currentTime+0.03;
-    if(key==='accelPulse')playAccelPulse(t0);
-    else if(key==='tranceGate')playTranceGate(t0);
-    else if(key==='throb')playThrob(t0);
-    else if(key==='mechAssembly')playMechAssembly(t0);
-    else playTranceGate(t0);
+    playSoundFromBuffer(key);
   }
   function playProduceSound(){
     if(!audioCtx)return;
     if(audioCtx.state==='suspended'){try{audioCtx.resume();}catch(e){}}
     playSoundKey(state.sound);
   }
+  /* ============ CACHÉ DE SONIDOS (renderizado único) ============ */
+  var soundBuffers = {};
+  var SOUND_DURATIONS = {
+    tranceGate: 2.4,
+    accelPulse: 2.6,
+    throb: 2.0,
+    mechAssembly: 2.6
+  };
+  var RENDER_SAMPLE_RATE = 44100;
+
+  function renderSoundToBuffer(key){
+    var OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    if(!OC) return Promise.resolve();
+    var dur = SOUND_DURATIONS[key] || 2.5;
+    var offline = new OC(1, Math.ceil(dur * RENDER_SAMPLE_RATE), RENDER_SAMPLE_RATE);
+
+    var savedCtx = audioCtx;
+    var savedKeys = audioKeysGain;
+    var savedProd = audioProduceGain;
+    var savedReverbIn = reverbIn;
+    var savedReverbOut = reverbOut;
+    var savedKeysSend = keysReverbSend;
+    var savedProdSend = produceReverbSend;
+
+    audioCtx = offline;
+    audioKeysGain = offline.createGain();
+    audioKeysGain.connect(offline.destination);
+    audioProduceGain = offline.createGain();
+    audioProduceGain.connect(offline.destination);
+    reverbIn = offline.createGain();
+    reverbOut = offline.createGain();
+    keysReverbSend = offline.createGain();
+    produceReverbSend = offline.createGain();
+
+    try {
+      if(key === 'tranceGate') playTranceGate(0);
+      else if(key === 'accelPulse') playAccelPulse(0);
+      else if(key === 'throb') playThrob(0);
+      else if(key === 'mechAssembly') playMechAssembly(0);
+    } catch(e){}
+
+    audioCtx = savedCtx;
+    audioKeysGain = savedKeys;
+    audioProduceGain = savedProd;
+    reverbIn = savedReverbIn;
+    reverbOut = savedReverbOut;
+    keysReverbSend = savedKeysSend;
+    produceReverbSend = savedProdSend;
+
+    return offline.startRendering().then(function(buffer){
+      soundBuffers[key] = buffer;
+    }).catch(function(){});
+  }
+
+  function renderAllSounds(){
+    return Promise.all(Object.keys(SOUND_DURATIONS).map(function(k){
+      return renderSoundToBuffer(k);
+    }));
+  }
+
+  function playSoundFromBuffer(key){
+    if(!audioCtx) return;
+    var buffer = soundBuffers[key];
+    if(!buffer){
+      var t0 = audioCtx.currentTime + 0.03;
+      if(key === 'tranceGate') playTranceGate(t0);
+      else if(key === 'accelPulse') playAccelPulse(t0);
+      else if(key === 'throb') playThrob(t0);
+      else if(key === 'mechAssembly') playMechAssembly(t0);
+      return;
+    }
+    var src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    src.connect(audioProduceGain);
+    if(reverbIn){
+      var send = audioCtx.createGain();
+      send.gain.value = PRODUCE_REVERB_SEND;
+      src.connect(send).connect(reverbIn);
+    }
+    src.start();
+  }
+
   var lastVolTick=0;
   function playVolTick(){
     if(!audioCtx)return;
