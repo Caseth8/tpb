@@ -953,7 +953,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   function save(){try{localStorage.setItem(STORAGE,JSON.stringify(state));}catch(e){}}
 
   var state=load()||defaultState();
-  var history=[];
+  var actionHistory=[];
   var lastActionKey='ready';
   var isProducing=false;
   var pendingConvertKey=null;
@@ -2045,9 +2045,9 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     return s;
   }
   function pushHistory(preSnapshot){
-    history.push(preSnapshot||snapshot());
-    if(history.length>MAX_HISTORY)history.shift();
-    undoBtn.disabled=history.length===0;
+    actionHistory.push(preSnapshot||snapshot());
+    if(actionHistory.length>MAX_HISTORY)actionHistory.shift();
+    undoBtn.disabled=actionHistory.length===0;
   }
   function flashCards(keys){
     keys.forEach(function(k){
@@ -2327,10 +2327,10 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   function undo(){
     if(isProducing)return;
     clearNumFlash();
-    if(history.length===0){setLastAction(t('logNothingToUndo'));return;}
+    if(actionHistory.length===0){setLastAction(t('logNothingToUndo'));return;}
     var current=snapshot();
-    var prev=history.pop();
-    undoBtn.disabled=history.length===0;
+    var prev=actionHistory.pop();
+    undoBtn.disabled=actionHistory.length===0;
     var diffs=computeDiffs(current,prev);
     state.tr=prev.tr;
     state.gen=prev.gen;
@@ -2411,7 +2411,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
 
   function doReset(){
     clearNumFlash();
-    history=[];
+    actionHistory=[];
     var keptKeys=safeClamp(state.volumeKeys,0,1,DEFAULT_VOLUME);
     var keptProd=safeClamp(state.volumeProduce,0,1,DEFAULT_VOLUME);
     var keptLang=state.lang,keptSound=state.sound,keptSoundV=state.soundVersion,keptScreen=state.keepScreenOn;
@@ -2516,7 +2516,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   /* ============ AVISO BOTÓN ATRÁS ============ */
   function pushBackTrap(){
     try{
-      history.pushState({ tmApp: 1 }, '', '#tm-app');
+      window.history.pushState({ tmApp: 1 }, '', '#tm-app');
       return true;
     }catch(e){
       return false;
@@ -2527,8 +2527,8 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   if(!backTrapAvailable){
     try{ console.warn('[TM] No se pudo instalar la trampa de atrás (pushState no disponible).'); }catch(e){}
   }
-  if(backTrapAvailable && history.length < 2){
-    try{ console.warn('[TM] pushState no añadió entrada al historial. history.length=' + history.length); }catch(e){}
+  if(backTrapAvailable && window.history.length < 2){
+    try{ console.warn('[TM] pushState no añadió entrada al historial. window.history.length=' + window.history.length); }catch(e){}
   }
 
   var exitToastTimer = null;
