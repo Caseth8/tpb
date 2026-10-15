@@ -11,7 +11,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;overscroll-behavior:none}
-.app{height:100vh;height:100dvh;display:flex;flex-direction:column;gap:6px;max-width:540px;margin:0 auto;padding-top:max(5px,env(safe-area-inset-top));padding-bottom:max(5px,env(safe-area-inset-bottom));padding-left:max(5px,env(safe-area-inset-left));padding-right:max(5px,env(safe-area-inset-right));transition:opacity .25s}
+.app{height:100vh;height:100dvh;display:flex;flex-direction:column;gap:6px;max-width:540px;margin:0 auto;padding-top:max(5px,env(safe-area-inset-top));padding-bottom:max(5px,env(safe-area-inset-bottom));padding-left:max(5px,env(safe-area-inset-left));padding-right:max(5px,env(safe-area-inset-right));transition:opacity .25s;position:relative}
 .app.locked{pointer-events:none}
 .app.locked .produce-btn{opacity:.55}
 .app.locked .ctrl-btn{opacity:.55}
@@ -404,6 +404,28 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
 .lang-flag{font-size:28px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
 .lang-label{font-size:11px;font-weight:800;letter-spacing:.4px;color:#a89478;white-space:nowrap}
 .lang-option.selected .lang-label{color:#e8b878}
+
+/* ============ THEME SELECTOR ============ */
+.theme-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 4px}
+.theme-option{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:6px;cursor:pointer;font-family:inherit;transition:transform .08s,border-color .15s,background .15s;background:#1a1410;border:1.5px solid #4a3a2a;color:#d9cbb8}
+.theme-option:active{transform:scale(.96)}
+.theme-option.selected{border-color:#e8b878;background:#2a1f14}
+.theme-preview{width:100%;height:46px;border-radius:5px;position:relative;overflow:hidden;padding:3px;box-sizing:border-box}
+.theme-preview .tp-bar{position:absolute;top:3px;left:3px;right:3px;height:6px;border-radius:2px}
+.theme-preview .tp-body{position:absolute;bottom:3px;left:3px;right:3px;top:12px;border-radius:3px;display:flex;gap:2px;padding:2px;box-sizing:border-box}
+.theme-preview .tp-cell{flex:1;border-radius:2px}
+.theme-preview-panel{background:#000;border:1.5px solid #c8a06a}
+.theme-preview-panel .tp-bar{background:#2a2018;border:1px solid #c8a06a;border-radius:3px}
+.theme-preview-panel .tp-body .tp-cell{background:#5e463c;border:1.5px solid #bfa23a}
+.theme-preview-light{background:#d8d4c8;border:1.5px solid #1a1a1a;border-radius:10px}
+.theme-preview-light .tp-bar{background:#f0ece0;border:1px solid #1a1a1a;border-radius:8px}
+.theme-preview-light .tp-body .tp-cell{background:#5e463c;border-radius:6px;border:1.5px solid #bfa23a}
+.theme-preview-terminal{background:#000;border:1.5px solid #3aff6a}
+.theme-preview-terminal .tp-bar{background:#0a1a0a;border:1px solid #3aff6a;border-radius:0}
+.theme-preview-terminal .tp-body .tp-cell{background:#0a1a0a;border:1px solid #3aff6a;border-radius:0}
+.theme-label{font-size:11px;font-weight:800;letter-spacing:.4px;color:#a89478;white-space:nowrap}
+.theme-option.selected .theme-label{color:#e8b878}
+
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:600;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .confirm-overlay.active{display:flex;animation:logFade .15s ease}
 
@@ -521,9 +543,204 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
 .card-conv-btn .ccb-icon{width:clamp(14px,3.6vw,16px);height:clamp(14px,3.6vw,16px)}
 .card-conv-btn .ccb-arrow{font-size:clamp(10px,2.8vw,12px)}
 }
+
+/* ============================================================
+   ============ THEME: PANEL (default) ============
+   Marco latón · botones pastilla · borde de tarjeta = color recurso
+   ============================================================ */
+body.theme-panel{background:#0a0a0a}
+body.theme-panel .standalone-options-btn{background:linear-gradient(180deg,#2a2018,#16100a);border:2px solid #c8a06a;color:#ffd47a;border-radius:6px;box-shadow:inset 0 1px 0 rgba(255,212,122,.3),inset 0 -2px 0 rgba(0,0,0,.6)}
+body.theme-panel .standalone-options-btn:active{background:#0a0503;color:#ffd47a}
+body.theme-panel .gen-badge{color:#ffd47a;text-shadow:0 0 6px rgba(200,160,106,.5);letter-spacing:1px}
+body.theme-panel .tr-bar{background:linear-gradient(180deg,#2a2018,#16100a);border:2.5px solid #c8a06a;border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,212,122,.3),inset 0 -3px 0 rgba(0,0,0,.7)}
+body.theme-panel .tr-btn{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);color:#ffd47a;border:1.5px solid #c8a06a;border-radius:6px}
+body.theme-panel .tr-btn:active{background:#0a0503}
+body.theme-panel #trInc{background:linear-gradient(180deg,#e8c878,#a8802a);color:#1a0e05;border-color:#c8a06a;box-shadow:inset 0 -3px 0 rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.5),0 0 16px rgba(232,200,120,.4)}
+body.theme-panel .tr-label{color:#ffd47a;letter-spacing:2px}
+body.theme-panel .tr-val{color:#fff0c8;text-shadow:0 0 10px rgba(255,212,122,.6)}
+body.theme-panel .card{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);border:2.5px solid var(--ac);border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,212,122,.15),inset 0 -3px 0 rgba(0,0,0,.7),3px 3px 0 rgba(0,0,0,.5)}
+body.theme-panel .cols{border-radius:5px;overflow:hidden}
+body.theme-panel .col{border-radius:0}
+body.theme-panel .prod-col{background:linear-gradient(180deg,#5e463c,#3e2d26);border-right:1.5px solid rgba(0,0,0,.5)}
+body.theme-panel .card-conv-btn{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);border:1.5px solid var(--ac);border-radius:5px;color:#ffd47a}
+body.theme-panel .card-conv-btn.usable{box-shadow:0 0 0 1px var(--ac),0 0 12px rgba(255,212,122,.25),inset 0 1px 0 rgba(255,212,122,.15)}
+body.theme-panel .status-bar{background:#0a0a0a;border:1.5px solid #c8a06a;color:#ffd47a;border-radius:5px}
+body.theme-panel .ctrl-btn{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);color:#ffd47a;border:2px solid #c8a06a;border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,212,122,.2),3px 3px 0 rgba(0,0,0,.5)}
+body.theme-panel .produce-btn{background:linear-gradient(180deg,#e05a3a,#a03020);color:#fff;border-color:#c8a06a;box-shadow:inset 0 -3px 0 rgba(0,0,0,.4),3px 3px 0 rgba(0,0,0,.5);text-shadow:0 1px 2px rgba(0,0,0,.5)}
+body.theme-panel .reset-btn{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);color:#ff8a6a;border-color:#c8a06a}
+body.theme-panel .log-btn{color:#ffd47a}
+body.theme-panel .log-overlay{background:#0a0a0a}
+body.theme-panel .log-header{border-bottom-color:#3a2a18}
+body.theme-panel .log-title{color:#ffd47a}
+body.theme-panel .log-count{color:#a88040}
+body.theme-panel .log-back-bottom{background:linear-gradient(180deg,#e8c878,#a8802a);border-color:#c8a06a;color:#1a0e05;box-shadow:0 4px 0 #6a4a10,0 4px 16px rgba(232,200,120,.55)}
+body.theme-panel .lang-option,body.theme-panel .sound-option,body.theme-panel .screen-row,body.theme-panel .opts-vol-row,body.theme-panel .theme-option{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);border:1.5px solid #c8a06a;border-radius:6px}
+body.theme-panel .lang-option.selected,body.theme-panel .sound-option.selected,body.theme-panel .theme-option.selected{background:#2a1a10;border-color:#ffd47a;box-shadow:0 0 12px rgba(255,212,122,.25)}
+body.theme-panel .vol-btn{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);border:1.5px solid #c8a06a;color:#ffd47a;border-radius:6px}
+body.theme-panel .opts-vol-val{color:#ffd47a}
+body.theme-panel .toggle-switch[aria-checked="true"]{background:linear-gradient(180deg,#e8c878,#a8802a)}
+body.theme-panel .toggle-switch[aria-checked="true"] .toggle-knob{background:#1a0e05}
+body.theme-panel .confirm-box{background:#1a1a1a;border-color:#c8a06a;border-radius:8px}
+body.theme-panel .confirm-title{color:#ffd47a}
+body.theme-panel .confirm-btn{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);border-color:#c8a06a;color:#d9cbb8}
+body.theme-panel .confirm-btn.danger{background:linear-gradient(180deg,#e05a3a,#a03020);color:#fff;border-color:#c8a06a;box-shadow:0 3px 0 #6a2a1c}
+body.theme-panel .tile-modal-box{background:#1a1a1a;border-color:#c8a06a;border-radius:8px}
+body.theme-panel .tile-btn{background:linear-gradient(180deg,#1a1a1a,#0a0a0a);border-color:#c8a06a;color:#d9cbb8}
+body.theme-panel .tile-btn.primary{background:linear-gradient(180deg,#e05a3a,#a03020);color:#fff;border-color:#c8a06a}
+body.theme-panel .exit-toast{background:rgba(26,20,10,.95);border-color:#c8a06a;color:#ffd47a}
+body.theme-panel .rotate-overlay{background:#0a0a0a}
+
+/* ============================================================
+   ============ THEME: LIGHT ============
+   ============================================================ */
+body.theme-light{background:#d8d4c8;color:#1a1a1a}
+body.theme-light .app{color:#1a1a1a}
+body.theme-light .standalone-options-btn{background:#f0ece0;border:1.5px solid #1a1a1a;color:#1a1a1a;border-radius:20px;font-weight:500}
+body.theme-light .standalone-options-btn:active{background:#e0dcc8;color:#1a1a1a}
+body.theme-light .gen-badge{background:#1a1a1a;color:#f0ece0;padding:2px 10px;border-radius:20px;font-weight:500;letter-spacing:1px}
+body.theme-light .tr-bar{background:#f0ece0;border:1.5px solid #1a1a1a;border-radius:20px;box-shadow:inset 0 0 0 3px #d8d4c8,inset 0 0 0 5px #f0ece0;padding:3px 6px}
+body.theme-light .tr-btn{background:#1a1a1a;color:#f0ece0;border:none;border-radius:50%;font-weight:400}
+body.theme-light .tr-btn:active{background:#333}
+body.theme-light #trInc{background:#e8a83a;color:#1a1a1a;border-radius:20px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
+body.theme-light .tr-label{color:#1a1a1a;font-weight:700;letter-spacing:2px}
+body.theme-light .tr-val{color:#1a1a1a;font-weight:300;letter-spacing:-2px;text-shadow:none}
+body.theme-light .card{background:#f0ece0;border:2.5px solid var(--ac);border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1),inset 0 0 0 3px #d8d4c8,inset 0 0 0 5px #f0ece0;padding:5px}
+body.theme-light .cols{border-radius:12px;overflow:hidden}
+body.theme-light .col{border-radius:0}
+body.theme-light .prod-col{background:linear-gradient(180deg,#5e463c,#3e2d26)}
+body.theme-light .prod-val{color:#f0e8d8;font-weight:500;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+body.theme-light .res-val{font-weight:500}
+body.theme-light .card-conv-btn{background:#1a1a1a;color:#f0ece0;border:none;border-radius:12px;font-weight:500;font-size:13px;letter-spacing:.5px}
+body.theme-light .card-conv-btn.usable{background:#1a1a1a;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+body.theme-light .status-bar{background:#1a1a1a;color:#f0ece0;border:none;border-radius:12px;text-transform:uppercase;letter-spacing:3px;font-size:9.5px;font-weight:400}
+body.theme-light .ctrl-btn{background:#f0ece0;color:#1a1a1a;border:1.5px solid #1a1a1a;border-radius:14px;font-weight:500;box-shadow:0 3px 8px rgba(0,0,0,.1)}
+body.theme-light .ctrl-btn:active{background:#e0dcc8}
+body.theme-light .produce-btn{background:#e8a83a;color:#1a1a1a;border:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15),0 3px 8px rgba(0,0,0,.15);text-shadow:none}
+body.theme-light .reset-btn{background:#f0ece0;color:#a03020;border-color:#a03020}
+body.theme-light .log-btn{color:#1a1a1a}
+body.theme-light .log-overlay{background:#d8d4c8;color:#1a1a1a}
+body.theme-light .log-header{border-bottom-color:#b0aca0}
+body.theme-light .log-title{color:#1a1a1a;letter-spacing:2px}
+body.theme-light .log-count{color:#666}
+body.theme-light .log-subtitle{color:#666}
+body.theme-light .log-entry{border-bottom-color:#c0bab0}
+body.theme-light .log-entry:nth-child(odd){background:rgba(255,255,255,.4)}
+body.theme-light .log-time{color:#666}
+body.theme-light .log-msg{color:#1a1a1a}
+body.theme-light .log-empty{color:#999}
+body.theme-light .log-back-bottom{background:#e8a83a;color:#1a1a1a;border:none;box-shadow:0 4px 0 #b87820,0 4px 16px rgba(232,168,58,.55)}
+body.theme-light .lang-option,body.theme-light .sound-option,body.theme-light .screen-row,body.theme-light .opts-vol-row,body.theme-light .theme-option{background:#f0ece0;color:#1a1a1a;border:1.5px solid #b0aca0;border-radius:12px}
+body.theme-light .lang-option.selected,body.theme-light .sound-option.selected,body.theme-light .theme-option.selected{background:#e8e4d8;border-color:#1a1a1a}
+body.theme-light .lang-label{color:#666}
+body.theme-light .lang-option.selected .lang-label{color:#1a1a1a}
+body.theme-light .sound-name{color:#1a1a1a}
+body.theme-light .sound-check{border-color:#b0aca0;color:#f0ece0}
+body.theme-light .sound-option.selected .sound-check{background:#1a1a1a;border-color:#1a1a1a;color:#f0ece0}
+body.theme-light .screen-main{color:#1a1a1a}
+body.theme-light .screen-sub{color:#666}
+body.theme-light .opts-title{color:#1a1a1a}
+body.theme-light .opts-hint{color:#666}
+body.theme-light .vol-btn{background:#f0ece0;border:1.5px solid #b0aca0;color:#1a1a1a;border-radius:10px}
+body.theme-light .vol-btn:active{background:#e0dcc8;color:#1a1a1a}
+body.theme-light .opts-vol-val{color:#1a1a1a}
+body.theme-light .toggle-switch{background:#c0bcb0}
+body.theme-light .toggle-switch[aria-checked="true"]{background:#1a1a1a}
+body.theme-light .toggle-knob{background:#888}
+body.theme-light .toggle-switch[aria-checked="true"] .toggle-knob{background:#f0ece0}
+body.theme-light .opts-vol-row .row-label .rl-main{color:#1a1a1a}
+body.theme-light .opts-vol-row .row-label .rl-sub{color:#666}
+body.theme-light .opts-vol-icon{color:#1a1a1a}
+body.theme-light .confirm-box{background:#f0ece0;border-color:#1a1a1a}
+body.theme-light .confirm-title{color:#a03020}
+body.theme-light .confirm-text{color:#1a1a1a}
+body.theme-light .confirm-text strong{color:#1a1a1a}
+body.theme-light .confirm-btn{background:#f0ece0;border-color:#b0aca0;color:#1a1a1a}
+body.theme-light .confirm-btn.danger{background:#e8a83a;color:#1a1a1a;border:none;box-shadow:0 3px 0 #b87820}
+body.theme-light .tile-modal-box{background:#f0ece0;border-color:#b0aca0}
+body.theme-light .tile-msg{color:#1a1a1a}
+body.theme-light .tile-btn{background:#f0ece0;border-color:#b0aca0;color:#1a1a1a}
+body.theme-light .tile-btn.primary{background:#e8a83a;color:#1a1a1a;border:none}
+body.theme-light .exit-toast{background:rgba(240,236,224,.95);border-color:#1a1a1a;color:#1a1a1a}
+body.theme-light .rotate-overlay{background:#d8d4c8;color:#1a1a1a}
+body.theme-light .rotate-svg rect,body.theme-light .rotate-svg line{stroke:#1a1a1a}
+body.theme-light .rotate-title{color:#1a1a1a}
+body.theme-light .rotate-sub{color:#666}
+
+/* ============================================================
+   ============ THEME: TERMINAL ============
+   ============================================================ */
+body.theme-terminal{background:#000}
+body.theme-terminal .standalone-options-btn{background:#0a1a0a;border:2px solid #3aff6a;color:#3aff6a;border-radius:0;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .gen-badge{background:#000;color:#3aff6a;border:1.5px solid #3aff6a;padding:2px 8px;border-radius:0;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .tr-bar{background:#0a1a0a;border:2px solid #3aff6a;border-radius:0;box-shadow:inset 0 0 12px rgba(58,255,106,.25)}
+body.theme-terminal .tr-btn{background:#000;color:#3aff6a;border:1.5px solid #3aff6a;border-radius:0;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .tr-btn:active{background:#0a1a0a}
+body.theme-terminal #trInc{background:#3aff6a;color:#000;text-shadow:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.35)}
+body.theme-terminal .tr-label{color:#3aff6a;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .tr-val{color:#7aff9a;text-shadow:0 0 10px #3aff6a,0 0 20px rgba(58,255,106,.5)}
+body.theme-terminal .card{background:#000;border:2px solid var(--ac);border-radius:0;box-shadow:inset 0 0 14px rgba(58,255,106,.2),3px 3px 0 rgba(58,255,106,.4)}
+body.theme-terminal .cols{border-radius:0}
+body.theme-terminal .col{border-radius:0}
+body.theme-terminal .prod-col{background:#564039;border-right:1.5px solid #3aff6a}
+body.theme-terminal .prod-val{color:#e4c69a;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+body.theme-terminal .card-conv-btn{background:#000;border:1.5px solid var(--ac);border-radius:0;color:#3aff6a;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .card-conv-btn.usable{box-shadow:0 0 0 1px #3aff6a,0 0 10px rgba(58,255,106,.3);background:#0a1a0a}
+body.theme-terminal .status-bar{background:#000;color:#3aff6a;border:1.5px solid #3aff6a;border-radius:0;text-transform:uppercase;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .ctrl-btn{background:#0a1a0a;color:#3aff6a;border:2px solid #3aff6a;border-radius:0;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .produce-btn{background:#3aff6a;color:#000;text-shadow:none;box-shadow:inset 0 -3px 0 rgba(0,0,0,.35),3px 3px 0 rgba(58,255,106,.5)}
+body.theme-terminal .reset-btn{background:#0a1a0a;color:#ff6a5a;border-color:#ff6a5a;text-shadow:0 0 4px #ff6a5a}
+body.theme-terminal .log-btn{color:#3aff6a}
+body.theme-terminal .log-overlay{background:#000}
+body.theme-terminal .log-header{border-bottom-color:#1a4a1a}
+body.theme-terminal .log-title{color:#3aff6a;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .log-count{color:#3aff6a}
+body.theme-terminal .log-subtitle{color:#3a8a4a}
+body.theme-terminal .log-entry{border-bottom-color:#0a1a0a}
+body.theme-terminal .log-time{color:#3a8a4a;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .log-msg{color:#3aff6a}
+body.theme-terminal .log-empty{color:#3a8a4a}
+body.theme-terminal .log-back-bottom{background:#3aff6a;color:#000;border:none;box-shadow:0 4px 0 #1a8a3a,0 4px 16px rgba(58,255,106,.55)}
+body.theme-terminal .lang-option,body.theme-terminal .sound-option,body.theme-terminal .screen-row,body.theme-terminal .opts-vol-row,body.theme-terminal .theme-option{background:#0a1a0a;border:1.5px solid #3aff6a;border-radius:0;color:#3aff6a}
+body.theme-terminal .lang-option.selected,body.theme-terminal .sound-option.selected,body.theme-terminal .theme-option.selected{background:#3aff6a;color:#000}
+body.theme-terminal .lang-label{color:#3a8a4a}
+body.theme-terminal .lang-option.selected .lang-label{color:#000}
+body.theme-terminal .sound-name{color:#3aff6a}
+body.theme-terminal .sound-option.selected .sound-name{color:#000}
+body.theme-terminal .sound-check{border-color:#3aff6a;color:#3aff6a}
+body.theme-terminal .sound-option.selected .sound-check{background:#000;border-color:#000;color:#3aff6a}
+body.theme-terminal .screen-main{color:#3aff6a}
+body.theme-terminal .screen-sub{color:#3a8a4a}
+body.theme-terminal .opts-title{color:#3aff6a;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .opts-hint{color:#3a8a4a}
+body.theme-terminal .vol-btn{background:#000;border:1.5px solid #3aff6a;color:#3aff6a;border-radius:0;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .vol-btn:active{background:#3aff6a;color:#000;text-shadow:none}
+body.theme-terminal .opts-vol-val{color:#3aff6a}
+body.theme-terminal .toggle-switch{background:#0a1a0a;border:1.5px solid #3aff6a;border-radius:0;box-shadow:none}
+body.theme-terminal .toggle-switch[aria-checked="true"]{background:#3aff6a}
+body.theme-terminal .toggle-knob{background:#3a8a4a;border-radius:0}
+body.theme-terminal .toggle-switch[aria-checked="true"] .toggle-knob{background:#000}
+body.theme-terminal .opts-vol-row .row-label .rl-main{color:#3aff6a;text-shadow:0 0 4px #3aff6a}
+body.theme-terminal .opts-vol-row .row-label .rl-sub{color:#3a8a4a}
+body.theme-terminal .opts-vol-icon{color:#3aff6a}
+body.theme-terminal .confirm-box{background:#000;border-color:#3aff6a;border-radius:0}
+body.theme-terminal .confirm-title{color:#3aff6a}
+body.theme-terminal .confirm-text{color:#3aff6a}
+body.theme-terminal .confirm-text strong{color:#7aff9a}
+body.theme-terminal .confirm-btn{background:#0a1a0a;border-color:#3aff6a;color:#3aff6a;border-radius:0}
+body.theme-terminal .confirm-btn.danger{background:#3aff6a;color:#000;border:none;box-shadow:0 3px 0 #1a8a3a}
+body.theme-terminal .tile-modal-box{background:#000;border-color:#3aff6a;border-radius:0}
+body.theme-terminal .tile-msg{color:#3aff6a}
+body.theme-terminal .tile-btn{background:#0a1a0a;border-color:#3aff6a;color:#3aff6a;border-radius:0}
+body.theme-terminal .tile-btn.primary{background:#3aff6a;color:#000;border:none}
+body.theme-terminal .exit-toast{background:rgba(0,20,0,.95);border-color:#3aff6a;color:#3aff6a}
+body.theme-terminal .rotate-overlay{background:#000}
+body.theme-terminal .rotate-svg rect,body.theme-terminal .rotate-svg line{stroke:#3aff6a}
+body.theme-terminal .rotate-title{color:#3aff6a}
+body.theme-terminal .rotate-sub{color:#3a8a4a}
+body.theme-terminal .app::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px);pointer-events:none;z-index:9000;mix-blend-mode:multiply;border-radius:4px}
 </style>
 </head>
-<body>
+<body class="theme-panel">
 <div class="app" id="appRoot">
   <div class="top-row">
     <button class="standalone-options-btn" id="optionsBtn" title="Opciones">⚙</button>
@@ -600,11 +817,40 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     <h2 class="log-title" data-i18n="options">Options</h2>
   </div>
   <div class="log-content">
+
     <div class="opts-section">
       <div class="opts-title" data-i18n="language">Language</div>
       <div class="opts-hint" data-i18n="languageHint">Choose the language of the app.</div>
       <div class="lang-options" id="langOptions"></div>
     </div>
+
+    <div class="opts-section">
+      <div class="opts-title" data-i18n="interfaceModel">Interface model</div>
+      <div class="opts-hint" data-i18n="interfaceModelHint">Choose the visual style of the board.</div>
+      <div class="theme-options" id="themeOptions"></div>
+    </div>
+
+    <div class="opts-section">
+      <div class="opts-title" data-i18n="loudKeysTitle">Key sounds</div>
+      <div class="opts-hint" data-i18n="loudKeysHint">Exaggerated, very audible beeps for noisy environments.</div>
+      <div class="screen-row">
+        <span class="screen-icon" id="loudKeysIcon">🔔</span>
+        <div class="screen-label">
+          <span class="screen-main" data-i18n="loudKeys">Exaggerated keys</span>
+          <span class="screen-sub" data-i18n="loudKeysSub">Louder, sharper +/- beeps</span>
+        </div>
+        <button class="toggle-switch" id="loudKeysToggle" role="switch" aria-checked="false" aria-label="Loud keys">
+          <span class="toggle-knob"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="opts-section">
+      <div class="opts-title" data-i18n="productionSound">Production sound</div>
+      <div class="opts-hint" data-i18n="productionSoundHint">Tap to hear and pick. Applied on next PRODUCE.</div>
+      <div class="sound-options" id="soundOptions"></div>
+    </div>
+
     <div class="opts-section">
       <div class="opts-title" data-i18n="volumes">Volumes</div>
       <div class="opts-vol-row">
@@ -628,6 +874,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
         <button class="vol-btn" id="optProducePlus" type="button" aria-label="Increase volume">+</button>
       </div>
     </div>
+
     <div class="opts-section">
       <div class="opts-title" data-i18n="screen">Screen</div>
       <div class="opts-hint" data-i18n="screenHint">Prevents it from turning off while using the board.</div>
@@ -642,11 +889,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
         </button>
       </div>
     </div>
-    <div class="opts-section">
-      <div class="opts-title" data-i18n="productionSound">Production sound</div>
-      <div class="opts-hint" data-i18n="productionSoundHint">Tap to hear and pick. Applied on next PRODUCE.</div>
-      <div class="sound-options" id="soundOptions"></div>
-    </div>
+
     <div class="opts-credits">Diseñado por Caseth</div>
   </div>
   <button class="log-back-bottom" id="optionsBack">
@@ -694,10 +937,13 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   const DEFAULT_SOUND='tranceGate';
   const DEFAULT_VOLUME=1.0;
   const DEFAULT_KEEP_SCREEN_ON=true;
+  const DEFAULT_LOUD_KEYS=false;
+  const DEFAULT_THEME='panel';
   const CONV_AMOUNT=8;
   const TILE_NOTAP_MS=350;
   const DEFAULT_PROD=1;
   const EXIT_TOAST_MS=2500;
+  const VALID_THEMES=['panel','light','terminal'];
 
   const PHASE_A_START  = 80;
   const PHASE_A_MS     = 650;
@@ -714,7 +960,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   const KEYS_REVERB_SEND    = 0.55;
   const PRODUCE_REVERB_SEND = 0.25;
   const REVERB_WET          = 0.32;
-  const MASTER_GAIN         = 1.0;
+  const MASTER_GAIN         = 3.0;
   const VOL_STEP            = 5;
   const VOL_STEP_MS_LONGPRESS = 400;
 
@@ -731,8 +977,14 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     {key:'ja',flag:'🇯🇵',label:'日本語'}
   ];
 
+  const THEMES=[
+    {key:'panel',labelKey:'themePanel'},
+    {key:'light',labelKey:'themeLight'},
+    {key:'terminal',labelKey:'themeTerminal'}
+  ];
+
   const I18N={
-    es:{terraformation:'Terraformación',ready:'Listo',holdToProduce:'mantener pulsado para',produce:'PRODUCIR',logShort:'REG.',reset:'RESET',hold:'mantener',log:'Registro',back:'Volver',options:'Opciones',language:'Idioma',languageHint:'Elige el idioma de la aplicación.',volumes:'Volúmenes',keysVolume:'Teclas',keysVolumeHint:'Botones y reservas',produceVolume:'Producción',produceVolumeHint:'Efecto de PRODUCIR',screen:'Pantalla',screenHint:'Evita que se apague mientras usas el tablero.',keepScreenOn:'Mantener pantalla encendida',keepScreenOnHint:'Activo mientras la pestaña esté visible',productionSound:'Sonido de producción',productionSoundHint:'Toca para escuchar y elegir. Se aplicará al próximo PRODUCIR.',noActions:'Sin acciones registradas',entries:'entradas',entriesSingular:'entrada',logSubtitle:'Se conservarán los últimos {n} registros desde el último inicio o reinicio.',confirmReset:'Confirmar reinicio',confirmResetText:'Se borrarán <strong>todos los recursos, la producción, el nivel de terraformación y la generación</strong>.<br><br>También se <strong>reiniciará el registro de acciones</strong>.',cancel:'CANCELAR',resetAction:'REINICIAR',logProduction:'producción',logReserve:'reserva',logProduce:'PRODUCIR',logUndo:'DESHACER',logReset:'REINICIO — todo a valores iniciales',logProduceNoChange:'producir — sin cambios',logNothingToUndo:'nada que deshacer',logConvert:'CONVERTIR',res_mc:'M€',res_steel:'Acero',res_titanium:'Titanio',res_plants:'Plantas',res_energy:'Energía',res_heat:'Calor',rotateTitle:'Gira el dispositivo a vertical',rotateSub:'Este tablero está diseñado para usarse en vertical',exitWarning:'Pulsa atrás de nuevo para salir',
+    es:{terraformation:'Terraformación',ready:'Listo',holdToProduce:'mantener pulsado para',produce:'PRODUCIR',logShort:'REG.',reset:'RESET',hold:'mantener',log:'Registro',back:'Volver',options:'Opciones',language:'Idioma',languageHint:'Elige el idioma de la aplicación.',interfaceModel:'Modelo de interfaz',interfaceModelHint:'Elige el estilo visual del tablero.',themePanel:'Panel',themeLight:'Claro',themeTerminal:'Terminal',volumes:'Volúmenes',keysVolume:'Teclas',keysVolumeHint:'Botones y reservas',produceVolume:'Producción',produceVolumeHint:'Efecto de PRODUCIR',screen:'Pantalla',screenHint:'Evita que se apague mientras usas el tablero.',keepScreenOn:'Mantener pantalla encendida',keepScreenOnHint:'Activo mientras la pestaña esté visible',loudKeysTitle:'Sonido de teclas',loudKeysHint:'Beeps exagerados y muy audibles para ambientes ruidosos.',loudKeys:'Teclas exageradas',loudKeysSub:'Beeps +/- más agudos y potentes',productionSound:'Sonido de producción',productionSoundHint:'Toca para escuchar y elegir. Se aplicará al próximo PRODUCIR.',noActions:'Sin acciones registradas',entries:'entradas',entriesSingular:'entrada',logSubtitle:'Se conservarán los últimos {n} registros desde el último inicio o reinicio.',confirmReset:'Confirmar reinicio',confirmResetText:'Se borrarán <strong>todos los recursos, la producción, el nivel de terraformación y la generación</strong>.<br><br>También se <strong>reiniciará el registro de acciones</strong>.',cancel:'CANCELAR',resetAction:'REINICIAR',logProduction:'producción',logReserve:'reserva',logProduce:'PRODUCIR',logUndo:'DESHACER',logReset:'REINICIO — todo a valores iniciales',logProduceNoChange:'producir — sin cambios',logNothingToUndo:'nada que deshacer',logConvert:'CONVERTIR',res_mc:'M€',res_steel:'Acero',res_titanium:'Titanio',res_plants:'Plantas',res_energy:'Energía',res_heat:'Calor',rotateTitle:'Gira el dispositivo a vertical',rotateSub:'Este tablero está diseñado para usarse en vertical',exitWarning:'Pulsa atrás de nuevo para salir',
       tileConsumePlants:'CONSUMIR 8 {icon} PARA COLOCAR LOSETA DE VEGETACIÓN',
       tileConsumeHeat:'CONSUMIR 8 {icon} PARA SUBIR TEMPERATURA',
       tileIncTR:'INCREMENTAR {abbr}',
@@ -746,7 +998,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       priceSteel:'(2€)',
       priceTitanium:'(3€)',
       trAbbr:'VT'},
-    en:{terraformation:'Terraformation',ready:'Ready',holdToProduce:'hold to',produce:'PRODUCE',logShort:'LOG.',reset:'RESET',hold:'hold',log:'Log',back:'Back',options:'Options',language:'Language',languageHint:'Choose the language of the app.',volumes:'Volumes',keysVolume:'Keys',keysVolumeHint:'Buttons and reserves',produceVolume:'Production',produceVolumeHint:'PRODUCE effect',screen:'Screen',screenHint:'Prevents it from turning off while using the board.',keepScreenOn:'Keep screen on',keepScreenOnHint:'Active while the tab is visible',productionSound:'Production sound',productionSoundHint:'Tap to hear and pick. Applied on next PRODUCE.',noActions:'No actions logged',entries:'entries',entriesSingular:'entry',logSubtitle:'The last {n} entries will be kept since the last start or reset.',confirmReset:'Confirm reset',confirmResetText:'All resources, production, terraformation level and generation will be cleared.<br><br>The action log will also be reset.',cancel:'CANCEL',resetAction:'RESET',logProduction:'production',logReserve:'reserve',logProduce:'PRODUCE',logUndo:'UNDO',logReset:'RESET — everything to initial values',logProduceNoChange:'produce — no changes',logNothingToUndo:'nothing to undo',logConvert:'CONVERT',res_mc:'M€',res_steel:'Steel',res_titanium:'Titanium',res_plants:'Plants',res_energy:'Energy',res_heat:'Heat',rotateTitle:'Rotate device to portrait',rotateSub:'This board is designed for portrait mode',exitWarning:'Press back again to exit',
+    en:{terraformation:'Terraformation',ready:'Ready',holdToProduce:'hold to',produce:'PRODUCE',logShort:'LOG.',reset:'RESET',hold:'hold',log:'Log',back:'Back',options:'Options',language:'Language',languageHint:'Choose the language of the app.',interfaceModel:'Interface model',interfaceModelHint:'Choose the visual style of the board.',themePanel:'Panel',themeLight:'Light',themeTerminal:'Terminal',volumes:'Volumes',keysVolume:'Keys',keysVolumeHint:'Buttons and reserves',produceVolume:'Production',produceVolumeHint:'PRODUCE effect',screen:'Screen',screenHint:'Prevents it from turning off while using the board.',keepScreenOn:'Keep screen on',keepScreenOnHint:'Active while the tab is visible',loudKeysTitle:'Key sounds',loudKeysHint:'Exaggerated, very audible beeps for noisy environments.',loudKeys:'Exaggerated keys',loudKeysSub:'Louder, sharper +/- beeps',productionSound:'Production sound',productionSoundHint:'Tap to hear and pick. Applied on next PRODUCE.',noActions:'No actions logged',entries:'entries',entriesSingular:'entry',logSubtitle:'The last {n} entries will be kept since the last start or reset.',confirmReset:'Confirm reset',confirmResetText:'All resources, production, terraformation level and generation will be cleared.<br><br>The action log will also be reset.',cancel:'CANCEL',resetAction:'RESET',logProduction:'production',logReserve:'reserve',logProduce:'PRODUCE',logUndo:'UNDO',logReset:'RESET — everything to initial values',logProduceNoChange:'produce — no changes',logNothingToUndo:'nothing to undo',logConvert:'CONVERT',res_mc:'M€',res_steel:'Steel',res_titanium:'Titanium',res_plants:'Plants',res_energy:'Energy',res_heat:'Heat',rotateTitle:'Rotate device to portrait',rotateSub:'This board is designed for portrait mode',exitWarning:'Press back again to exit',
       tileConsumePlants:'CONSUME 8 {icon} TO PLACE A VEGETATION TILE',
       tileConsumeHeat:'CONSUME 8 {icon} TO RAISE TEMPERATURE',
       tileIncTR:'INCREASE {abbr}',
@@ -760,7 +1012,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       priceSteel:'(2€)',
       priceTitanium:'(3€)',
       trAbbr:'TR'},
-    pt:{terraformation:'Terraformação',ready:'Pronto',holdToProduce:'mantenha premido para',produce:'PRODUZIR',logShort:'REG.',reset:'RESET',hold:'manter',log:'Registo',back:'Voltar',options:'Opções',language:'Idioma',languageHint:'Escolha o idioma da aplicação.',volumes:'Volumes',keysVolume:'Teclas',keysVolumeHint:'Botões e reservas',produceVolume:'Produção',produceVolumeHint:'Efeito de PRODUZIR',screen:'Ecrã',screenHint:'Evita que se desligue enquanto usa o tabuleiro.',keepScreenOn:'Manter ecrã ligado',keepScreenOnHint:'Ativo enquanto o separador estiver visível',productionSound:'Som de produção',productionSoundHint:'Toque para ouvir e escolher. Aplicado no próximo PRODUZIR.',noActions:'Sem ações registadas',entries:'entradas',entriesSingular:'entrada',logSubtitle:'Serão conservados os últimos {n} registos desde o último arranque ou reinício.',confirmReset:'Confirmar reinício',confirmResetText:'Serão apagados <strong>todos os recursos, a produção, o nível de terraformação e a geração</strong>.<br><br>O registo de ações também será reiniciado.',cancel:'CANCELAR',resetAction:'REINICIAR',logProduction:'produção',logReserve:'reserva',logProduce:'PRODUZIR',logUndo:'DESFAZER',logReset:'REINÍCIO — tudo para valores iniciais',logProduceNoChange:'produzir — sem alterações',logNothingToUndo:'nada para desfazer',logConvert:'CONVERTER',res_mc:'M$',res_steel:'Aço',res_titanium:'Titânio',res_plants:'Plantas',res_energy:'Energia',res_heat:'Calor',rotateTitle:'Rode o dispositivo para vertical',rotateSub:'Este tabuleiro foi projetado para o modo retrato',exitWarning:'Pressione voltar novamente para sair',
+    pt:{terraformation:'Terraformação',ready:'Pronto',holdToProduce:'mantenha premido para',produce:'PRODUZIR',logShort:'REG.',reset:'RESET',hold:'manter',log:'Registo',back:'Voltar',options:'Opções',language:'Idioma',languageHint:'Escolha o idioma da aplicação.',interfaceModel:'Modelo de interface',interfaceModelHint:'Escolha o estilo visual do tabuleiro.',themePanel:'Painel',themeLight:'Claro',themeTerminal:'Terminal',volumes:'Volumes',keysVolume:'Teclas',keysVolumeHint:'Botões e reservas',produceVolume:'Produção',produceVolumeHint:'Efeito de PRODUZIR',screen:'Ecrã',screenHint:'Evita que se desligue enquanto usa o tabuleiro.',keepScreenOn:'Manter ecrã ligado',keepScreenOnHint:'Ativo enquanto o separador estiver visível',loudKeysTitle:'Som das teclas',loudKeysHint:'Beeps exagerados e muito audíveis para ambientes ruidosos.',loudKeys:'Teclas exageradas',loudKeysSub:'Beeps +/- mais agudos e potentes',productionSound:'Som de produção',productionSoundHint:'Toque para ouvir e escolher. Aplicado no próximo PRODUZIR.',noActions:'Sem ações registadas',entries:'entradas',entriesSingular:'entrada',logSubtitle:'Serão conservados os últimos {n} registos desde o último arranque ou reinício.',confirmReset:'Confirmar reinício',confirmResetText:'Serão apagados <strong>todos os recursos, a produção, o nível de terraformação e a geração</strong>.<br><br>O registo de ações também será reiniciado.',cancel:'CANCELAR',resetAction:'REINICIAR',logProduction:'produção',logReserve:'reserva',logProduce:'PRODUZIR',logUndo:'DESFAZER',logReset:'REINÍCIO — tudo para valores iniciais',logProduceNoChange:'produzir — sem alterações',logNothingToUndo:'nada para desfazer',logConvert:'CONVERTER',res_mc:'M$',res_steel:'Aço',res_titanium:'Titânio',res_plants:'Plantas',res_energy:'Energia',res_heat:'Calor',rotateTitle:'Rode o dispositivo para vertical',rotateSub:'Este tabuleiro foi projetado para o modo retrato',exitWarning:'Pressione voltar novamente para sair',
       tileConsumePlants:'CONSUMIR 8 {icon} PARA COLOCAR LOSETA DE VEGETAÇÃO',
       tileConsumeHeat:'CONSUMIR 8 {icon} PARA SUBIR TEMPERATURA',
       tileIncTR:'AUMENTAR {abbr}',
@@ -774,7 +1026,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       priceSteel:'(2€)',
       priceTitanium:'(3€)',
       trAbbr:'IT'},
-    it:{terraformation:'Terraformazione',ready:'Pronto',holdToProduce:'tieni premuto per',produce:'PRODUCI',logShort:'REG.',reset:'RESET',hold:'tieni',log:'Registro',back:'Indietro',options:'Opzioni',language:'Lingua',languageHint:'Scegli la lingua dell\'app.',volumes:'Volumi',keysVolume:'Tasti',keysVolumeHint:'Pulsanti e riserve',produceVolume:'Produzione',produceVolumeHint:'Effetto di PRODUCI',screen:'Schermo',screenHint:'Impedisce che si spenga mentre usi il tabellone.',keepScreenOn:'Mantieni schermo acceso',keepScreenOnHint:'Attivo mentre la scheda è visibile',productionSound:'Suono di produzione',productionSoundHint:'Tocca per ascoltare e scegliere. Applicato al prossimo PRODUCI.',noActions:'Nessuna azione registrata',entries:'voci',entriesSingular:'voce',logSubtitle:'Verranno conservati gli ultimi {n} record dall\'ultimo avvio o ripristino.',confirmReset:'Conferma ripristino',confirmResetText:'Saranno cancellati <strong>tutte le risorse, la produzione, il livello di terraformazione e la generazione</strong>.<br><br>Anche il registro azioni sarà ripristinato.',cancel:'ANNULLA',resetAction:'RIPRISTINA',logProduction:'produzione',logReserve:'riserva',logProduce:'PRODUCI',logUndo:'ANNULLA',logReset:'RIPRISTINO — tutto ai valori iniziali',logProduceNoChange:'produci — nessun cambiamento',logNothingToUndo:'niente da annullare',logConvert:'CONVERTIRE',res_mc:'M€',res_steel:'Acciaio',res_titanium:'Titanio',res_plants:'Piante',res_energy:'Energia',res_heat:'Calore',rotateTitle:'Ruota il dispositivo in verticale',rotateSub:'Questo tabellone è progettato per la modalità verticale',exitWarning:'Premi indietro di nuovo per uscire',
+    it:{terraformation:'Terraformazione',ready:'Pronto',holdToProduce:'tieni premuto per',produce:'PRODUCI',logShort:'REG.',reset:'RESET',hold:'tieni',log:'Registro',back:'Indietro',options:'Opzioni',language:'Lingua',languageHint:'Scegli la lingua dell\'app.',interfaceModel:'Modello di interfaccia',interfaceModelHint:'Scegli lo stile visivo del tabellone.',themePanel:'Pannello',themeLight:'Chiaro',themeTerminal:'Terminale',volumes:'Volumi',keysVolume:'Tasti',keysVolumeHint:'Pulsanti e riserve',produceVolume:'Produzione',produceVolumeHint:'Effetto di PRODUCI',screen:'Schermo',screenHint:'Impedisce che si spenga mentre usi il tabellone.',keepScreenOn:'Mantieni schermo acceso',keepScreenOnHint:'Attivo mentre la scheda è visibile',loudKeysTitle:'Suono tasti',loudKeysHint:'Beep esagerati e molto udibili per ambienti rumorosi.',loudKeys:'Tasti esagerati',loudKeysSub:'Beep +/- più acuti e potenti',productionSound:'Suono di produzione',productionSoundHint:'Tocca per ascoltare e scegliere. Applicato al prossimo PRODUCI.',noActions:'Nessuna azione registrata',entries:'voci',entriesSingular:'voce',logSubtitle:'Verranno conservati gli ultimi {n} record dall\'ultimo avvio o ripristino.',confirmReset:'Conferma ripristino',confirmResetText:'Saranno cancellati <strong>tutte le risorse, la produzione, il livello di terraformazione e la generazione</strong>.<br><br>Anche il registro azioni sarà ripristinato.',cancel:'ANNULLA',resetAction:'RIPRISTINA',logProduction:'produzione',logReserve:'riserva',logProduce:'PRODUCI',logUndo:'ANNULLA',logReset:'RIPRISTINO — tutto ai valori iniziali',logProduceNoChange:'produci — nessun cambiamento',logNothingToUndo:'niente da annullare',logConvert:'CONVERTIRE',res_mc:'M€',res_steel:'Acciaio',res_titanium:'Titanio',res_plants:'Piante',res_energy:'Energia',res_heat:'Calore',rotateTitle:'Ruota il dispositivo in verticale',rotateSub:'Questo tabellone è progettato per la modalità verticale',exitWarning:'Premi indietro di nuovo per uscire',
       tileConsumePlants:'CONSUMARE 8 {icon} PER POSIZIONARE UNA TESSERA VEGETAZIONE',
       tileConsumeHeat:'CONSUMARE 8 {icon} PER AUMENTARE LA TEMPERATURA',
       tileIncTR:'AUMENTARE {abbr}',
@@ -788,7 +1040,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       priceSteel:'(2€)',
       priceTitanium:'(3€)',
       trAbbr:'TT'},
-    fr:{terraformation:'Terraformation',ready:'Prêt',holdToProduce:'maintenir appuyé pour',produce:'PRODUIRE',logShort:'REG.',reset:'RESET',hold:'maintenir',log:'Journal',back:'Retour',options:'Options',language:'Langue',languageHint:'Choisissez la langue de l\'application.',volumes:'Volumes',keysVolume:'Touches',keysVolumeHint:'Boutons et réserves',produceVolume:'Production',produceVolumeHint:'Effet de PRODUIRE',screen:'Écran',screenHint:'Empêche l\'extinction pendant l\'utilisation du plateau.',keepScreenOn:'Garder l\'écran allumé',keepScreenOnHint:'Actif tant que l\'onglet est visible',productionSound:'Son de production',productionSoundHint:'Touchez pour écouter et choisir. Appliqué au prochain PRODUIRE.',noActions:'Aucune action enregistrée',entries:'entrées',entriesSingular:'entrée',logSubtitle:'Les {n} dernières entrées seront conservées depuis le dernier démarrage ou la dernière réinitialisation.',confirmReset:'Confirmer réinitialisation',confirmResetText:'Toutes les ressources, la production, le niveau de terraformation et la génération seront effacés.<br><br>Le journal des actions sera également réinitialisé.',cancel:'ANNULER',resetAction:'RÉINITIALISER',logProduction:'production',logReserve:'réserve',logProduce:'PRODUIRE',logUndo:'ANNULER',logReset:'RÉINITIALISATION — tout aux valeurs initiales',logProduceNoChange:'produire — aucun changement',logNothingToUndo:'rien à annuler',logConvert:'CONVERTIR',res_mc:'M€',res_steel:'Acier',res_titanium:'Titane',res_plants:'Plantes',res_energy:'Énergie',res_heat:'Chaleur',rotateTitle:'Tournez l\'appareil en portrait',rotateSub:'Ce plateau est conçu pour le mode portrait',exitWarning:'Appuyez à nouveau sur retour pour quitter',
+    fr:{terraformation:'Terraformation',ready:'Prêt',holdToProduce:'maintenir appuyé pour',produce:'PRODUIRE',logShort:'REG.',reset:'RESET',hold:'maintenir',log:'Journal',back:'Retour',options:'Options',language:'Langue',languageHint:'Choisissez la langue de l\'application.',interfaceModel:'Modèle d\'interface',interfaceModelHint:'Choisissez le style visuel du plateau.',themePanel:'Panneau',themeLight:'Clair',themeTerminal:'Terminal',volumes:'Volumes',keysVolume:'Touches',keysVolumeHint:'Boutons et réserves',produceVolume:'Production',produceVolumeHint:'Effet de PRODUIRE',screen:'Écran',screenHint:'Empêche l\'extinction pendant l\'utilisation du plateau.',keepScreenOn:'Garder l\'écran allumé',keepScreenOnHint:'Actif tant que l\'onglet est visible',loudKeysTitle:'Son des touches',loudKeysHint:'Bips exagérés et très audibles pour environnements bruyants.',loudKeys:'Touches exagérées',loudKeysSub:'Bips +/- plus aigus et puissants',productionSound:'Son de production',productionSoundHint:'Touchez pour écouter et choisir. Appliqué au prochain PRODUIRE.',noActions:'Aucune action enregistrée',entries:'entrées',entriesSingular:'entrée',logSubtitle:'Les {n} dernières entrées seront conservées depuis le dernier démarrage ou la dernière réinitialisation.',confirmReset:'Confirmer réinitialisation',confirmResetText:'Toutes les ressources, la production, le niveau de terraformation et la génération seront effacés.<br><br>Le journal des actions sera également réinitialisé.',cancel:'ANNULER',resetAction:'RÉINITIALISER',logProduction:'production',logReserve:'réserve',logProduce:'PRODUIRE',logUndo:'ANNULER',logReset:'RÉINITIALISATION — tout aux valeurs initiales',logProduceNoChange:'produire — aucun changement',logNothingToUndo:'rien à annuler',logConvert:'CONVERTIR',res_mc:'M€',res_steel:'Acier',res_titanium:'Titane',res_plants:'Plantes',res_energy:'Énergie',res_heat:'Chaleur',rotateTitle:'Tournez l\'appareil en portrait',rotateSub:'Ce plateau est conçu pour le mode portrait',exitWarning:'Appuyez à nouveau sur retour pour quitter',
       tileConsumePlants:'CONSOMMER 8 {icon} POUR POSER UNE TUILE VÉGÉTATION',
       tileConsumeHeat:'CONSOMMER 8 {icon} POUR AUGMENTER LA TEMPÉRATURE',
       tileIncTR:'AUGMENTER {abbr}',
@@ -802,7 +1054,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       priceSteel:'(2€)',
       priceTitanium:'(3€)',
       trAbbr:'TR'},
-    de:{terraformation:'Terraformung',ready:'Bereit',holdToProduce:'halten zum',produce:'PRODUZIEREN',logShort:'PROT.',reset:'RESET',hold:'halten',log:'Protokoll',back:'Zurück',options:'Optionen',language:'Sprache',languageHint:'Wähle die Sprache der App.',volumes:'Lautstärken',keysVolume:'Tasten',keysVolumeHint:'Tasten und Vorräte',produceVolume:'Produktion',produceVolumeHint:'PRODUZIEREN-Klang',screen:'Bildschirm',screenHint:'Verhindert das Ausschalten während der Nutzung.',keepScreenOn:'Bildschirm eingeschaltet lassen',keepScreenOnHint:'Aktiv solange der Tab sichtbar ist',productionSound:'Produktionsklang',productionSoundHint:'Tippe zum Anhören und Auswählen. Wird beim nächsten PRODUZIEREN angewendet.',noActions:'Keine Aktionen protokolliert',entries:'Einträge',entriesSingular:'Eintrag',logSubtitle:'Die letzten {n} Einträge werden seit dem letzten Start oder Zurücksetzen aufbewahrt.',confirmReset:'Zurücksetzen bestätigen',confirmResetText:'Alle Ressourcen, die Produktion, der Terraformwert und die Generation werden gelöscht.<br><br>Das Aktionsprotokoll wird ebenfalls zurückgesetzt.',cancel:'ABBRECHEN',resetAction:'ZURÜCKSETZEN',logProduction:'Produktion',logReserve:'Vorrat',logProduce:'PRODUZIEREN',logUndo:'RÜCKGÄNGIG',logReset:'ZURÜCKSETZEN — alles auf Anfangswerte',logProduceNoChange:'produzieren — keine Änderungen',logNothingToUndo:'nichts rückgängig zu machen',logConvert:'UMWANDELN',res_mc:'M€',res_steel:'Stahl',res_titanium:'Titan',res_plants:'Pflanzen',res_energy:'Energie',res_heat:'Wärme',rotateTitle:'Gerät ins Hochformat drehen',rotateSub:'Dieses Spielfeld ist für das Hochformat ausgelegt',exitWarning:'Erneut zurück drücken zum Beenden',
+    de:{terraformation:'Terraformung',ready:'Bereit',holdToProduce:'halten zum',produce:'PRODUZIEREN',logShort:'PROT.',reset:'RESET',hold:'halten',log:'Protokoll',back:'Zurück',options:'Optionen',language:'Sprache',languageHint:'Wähle die Sprache der App.',interfaceModel:'Oberflächenmodell',interfaceModelHint:'Wähle den visuellen Stil des Spielfelds.',themePanel:'Panel',themeLight:'Hell',themeTerminal:'Terminal',volumes:'Lautstärken',keysVolume:'Tasten',keysVolumeHint:'Tasten und Vorräte',produceVolume:'Produktion',produceVolumeHint:'PRODUZIEREN-Klang',screen:'Bildschirm',screenHint:'Verhindert das Ausschalten während der Nutzung.',keepScreenOn:'Bildschirm eingeschaltet lassen',keepScreenOnHint:'Aktiv solange der Tab sichtbar ist',loudKeysTitle:'Tastenklang',loudKeysHint:'Übertriebene, sehr laute Pieptöne für laute Umgebungen.',loudKeys:'Übertriebene Tasten',loudKeysSub:'Lautere, schärfere +/- Töne',productionSound:'Produktionsklang',productionSoundHint:'Tippe zum Anhören und Auswählen. Wird beim nächsten PRODUZIEREN angewendet.',noActions:'Keine Aktionen protokolliert',entries:'Einträge',entriesSingular:'Eintrag',logSubtitle:'Die letzten {n} Einträge werden seit dem letzten Start oder Zurücksetzen aufbewahrt.',confirmReset:'Zurücksetzen bestätigen',confirmResetText:'Alle Ressourcen, die Produktion, der Terraformwert und die Generation werden gelöscht.<br><br>Das Aktionsprotokoll wird ebenfalls zurückgesetzt.',cancel:'ABBRECHEN',resetAction:'ZURÜCKSETZEN',logProduction:'Produktion',logReserve:'Vorrat',logProduce:'PRODUZIEREN',logUndo:'RÜCKGÄNGIG',logReset:'ZURÜCKSETZEN — alles auf Anfangswerte',logProduceNoChange:'produzieren — keine Änderungen',logNothingToUndo:'nichts rückgängig zu machen',logConvert:'UMWANDELN',res_mc:'M€',res_steel:'Stahl',res_titanium:'Titan',res_plants:'Pflanzen',res_energy:'Energie',res_heat:'Wärme',rotateTitle:'Gerät ins Hochformat drehen',rotateSub:'Dieses Spielfeld ist für das Hochformat ausgelegt',exitWarning:'Erneut zurück drücken zum Beenden',
       tileConsumePlants:'8 {icon} VERBRAUCHEN, UM EIN VEGETATIONSPLÄTTCHEN ZU PLATZIEREN',
       tileConsumeHeat:'8 {icon} VERBRAUCHEN, UM DIE TEMPERATUR ZU ERHÖHEN',
       tileIncTR:'{abbr} ERHÖHEN',
@@ -816,7 +1068,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       priceSteel:'(2€)',
       priceTitanium:'(3€)',
       trAbbr:'TW'},
-    ru:{terraformation:'Терраформирование',ready:'Готово',holdToProduce:'удерживайте для',produce:'ПРОИЗВЕСТИ',logShort:'ЖУРН.',reset:'СБРОС',hold:'удерживать',log:'Журнал',back:'Назад',options:'Настройки',language:'Язык',languageHint:'Выберите язык приложения.',volumes:'Громкость',keysVolume:'Клавиши',keysVolumeHint:'Кнопки и запасы',produceVolume:'Производство',produceVolumeHint:'Звук ПРОИЗВЕСТИ',screen:'Экран',screenHint:'Предотвращает выключение во время использования.',keepScreenOn:'Не выключать экран',keepScreenOnHint:'Активно пока вкладка видима',productionSound:'Звук производства',productionSoundHint:'Нажмите, чтобы прослушать и выбрать. Применится при следующем ПРОИЗВЕСТИ.',noActions:'Нет записанных действий',entries:'записей',entriesSingular:'запись',logSubtitle:'Будут сохранены последние {n} записей с момента последнего запуска или сброса.',confirmReset:'Подтвердить сброс',confirmResetText:'Все ресурсы, производство, рейтинг терраформирования и поколение будут удалены.<br><br>Журнал действий также будет сброшен.',cancel:'ОТМЕНА',resetAction:'СБРОСИТЬ',logProduction:'производство',logReserve:'запас',logProduce:'ПРОИЗВЕСТИ',logUndo:'ОТМЕНИТЬ',logReset:'СБРОС — всё к начальным значениям',logProduceNoChange:'произвести — без изменений',logNothingToUndo:'нечего отменять',logConvert:'ПРЕОБРАЗОВАТЬ',res_mc:'МК',res_steel:'Сталь',res_titanium:'Титан',res_plants:'Растения',res_energy:'Энергия',res_heat:'Тепло',rotateTitle:'Поверните устройство вертикально',rotateSub:'Этот пульт предназначен для вертикальной ориентации',exitWarning:'Нажмите назад ещё раз для выхода',
+    ru:{terraformation:'Терраформирование',ready:'Готово',holdToProduce:'удерживайте для',produce:'ПРОИЗВЕСТИ',logShort:'ЖУРН.',reset:'СБРОС',hold:'удерживать',log:'Журнал',back:'Назад',options:'Настройки',language:'Язык',languageHint:'Выберите язык приложения.',interfaceModel:'Модель интерфейса',interfaceModelHint:'Выберите визуальный стиль пульта.',themePanel:'Панель',themeLight:'Светлая',themeTerminal:'Терминал',volumes:'Громкость',keysVolume:'Клавиши',keysVolumeHint:'Кнопки и запасы',produceVolume:'Производство',produceVolumeHint:'Звук ПРОИЗВЕСТИ',screen:'Экран',screenHint:'Предотвращает выключение во время использования.',keepScreenOn:'Не выключать экран',keepScreenOnHint:'Активно пока вкладка видима',loudKeysTitle:'Звук клавиш',loudKeysHint:'Резкие, очень громкие сигналы для шумной обстановки.',loudKeys:'Громкие клавиши',loudKeysSub:'Более громкие и резкие +/- сигналы',productionSound:'Звук производства',productionSoundHint:'Нажмите, чтобы прослушать и выбрать. Применится при следующем ПРОИЗВЕСТИ.',noActions:'Нет записанных действий',entries:'записей',entriesSingular:'запись',logSubtitle:'Будут сохранены последние {n} записей с момента последнего запуска или сброса.',confirmReset:'Подтвердить сброс',confirmResetText:'Все ресурсы, производство, рейтинг терраформирования и поколение будут удалены.<br><br>Журнал действий также будет сброшен.',cancel:'ОТМЕНА',resetAction:'СБРОСИТЬ',logProduction:'производство',logReserve:'запас',logProduce:'ПРОИЗВЕСТИ',logUndo:'ОТМЕНИТЬ',logReset:'СБРОС — всё к начальным значениям',logProduceNoChange:'произвести — без изменений',logNothingToUndo:'нечего отменять',logConvert:'ПРЕОБРАЗОВАТЬ',res_mc:'МК',res_steel:'Сталь',res_titanium:'Титан',res_plants:'Растения',res_energy:'Энергия',res_heat:'Тепло',rotateTitle:'Поверните устройство вертикально',rotateSub:'Этот пульт предназначен для вертикальной ориентации',exitWarning:'Нажмите назад ещё раз для выхода',
       tileConsumePlants:'ПОТРАТИТЬ 8 {icon}, ЧТОБЫ РАЗМЕСТИТЬ ТАЙЛ РАСТИТЕЛЬНОСТИ',
       tileConsumeHeat:'ПОТРАТИТЬ 8 {icon}, ЧТОБЫ ПОДНЯТЬ ТЕМПЕРАТУРУ',
       tileIncTR:'ПОВЫСИТЬ {abbr}',
@@ -830,7 +1082,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       priceSteel:'(2€)',
       priceTitanium:'(3€)',
       trAbbr:'РТ'},
-    zh:{terraformation:'改造度',ready:'就绪',holdToProduce:'长按以',produce:'生产',logShort:'日志',reset:'重置',hold:'长按',log:'日志',back:'返回',options:'设置',language:'语言',languageHint:'选择应用程序的语言。',volumes:'音量',keysVolume:'按键',keysVolumeHint:'按钮和储备',produceVolume:'生产',produceVolumeHint:'生产音效',screen:'屏幕',screenHint:'使用时防止屏幕熄灭。',keepScreenOn:'保持屏幕常亮',keepScreenOnHint:'标签页可见时生效',productionSound:'生产音效',productionSoundHint:'点击试听并选择。将在下次生产时应用。',noActions:'无操作记录',entries:'条记录',entriesSingular:'条记录',logSubtitle:'自上次启动或重置以来将保留最近 {n} 条记录。',confirmReset:'确认重置',confirmResetText:'所有资源、产量、改造度和回合将被清除。<br><br>操作日志也将被重置。',cancel:'取消',resetAction:'重置',logProduction:'产量',logReserve:'储备',logProduce:'生产',logUndo:'撤销',logReset:'重置 — 全部恢复初始值',logProduceNoChange:'生产 — 无变化',logNothingToUndo:'没有可撤销的操作',logConvert:'转换',res_mc:'C',res_steel:'铁',res_titanium:'钛',res_plants:'叶子',res_energy:'能量',res_heat:'热量',rotateTitle:'请将设备旋转至竖向',rotateSub:'此控制面板专为竖向模式设计',exitWarning:'再按一次返回键退出',
+    zh:{terraformation:'改造度',ready:'就绪',holdToProduce:'长按以',produce:'生产',logShort:'日志',reset:'重置',hold:'长按',log:'日志',back:'返回',options:'设置',language:'语言',languageHint:'选择应用程序的语言。',interfaceModel:'界面模式',interfaceModelHint:'选择面板的视觉风格。',themePanel:'面板',themeLight:'明亮',themeTerminal:'终端',volumes:'音量',keysVolume:'按键',keysVolumeHint:'按钮和储备',produceVolume:'生产',produceVolumeHint:'生产音效',screen:'屏幕',screenHint:'使用时防止屏幕熄灭。',keepScreenOn:'保持屏幕常亮',keepScreenOnHint:'标签页可见时生效',loudKeysTitle:'按键音效',loudKeysHint:'适用于嘈杂环境的夸张、响亮的提示音。',loudKeys:'夸张按键',loudKeysSub:'更响亮、更尖锐的 +/- 提示音',productionSound:'生产音效',productionSoundHint:'点击试听并选择。将在下次生产时应用。',noActions:'无操作记录',entries:'条记录',entriesSingular:'条记录',logSubtitle:'自上次启动或重置以来将保留最近 {n} 条记录。',confirmReset:'确认重置',confirmResetText:'所有资源、产量、改造度和回合将被清除。<br><br>操作日志也将被重置。',cancel:'取消',resetAction:'重置',logProduction:'产量',logReserve:'储备',logProduce:'生产',logUndo:'撤销',logReset:'重置 — 全部恢复初始值',logProduceNoChange:'生产 — 无变化',logNothingToUndo:'没有可撤销的操作',logConvert:'转换',res_mc:'C',res_steel:'铁',res_titanium:'钛',res_plants:'叶子',res_energy:'能量',res_heat:'热量',rotateTitle:'请将设备旋转至竖向',rotateSub:'此控制面板专为竖向模式设计',exitWarning:'再按一次返回键退出',
       tileConsumePlants:'消耗 8 {icon} 放置植被板块',
       tileConsumeHeat:'消耗 8 {icon} 提升温度',
       tileIncTR:'提升{abbr}',
@@ -844,7 +1096,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       priceSteel:'(2€)',
       priceTitanium:'(3€)',
       trAbbr:'TR'},
-    ja:{terraformation:'テラフォーミング',ready:'準備完了',holdToProduce:'長押しで',produce:'生産',logShort:'ログ',reset:'リセット',hold:'長押し',log:'ログ',back:'戻る',options:'オプション',language:'言語',languageHint:'アプリの言語を選択してください。',volumes:'音量',keysVolume:'キー',keysVolumeHint:'ボタンとリザーブ',produceVolume:'生産',produceVolumeHint:'生産エフェクト',screen:'画面',screenHint:'使用中に画面が消えないようにします。',keepScreenOn:'画面をオンのままにする',keepScreenOnHint:'タブが表示されている間有効',productionSound:'生産サウンド',productionSoundHint:'タップして試聴・選択。次回の生産に適用されます。',noActions:'記録されたアクションはありません',entries:'件',entriesSingular:'件',logSubtitle:'前回の起動またはリセット以降の最新 {n} 件のログが保持されます。',confirmReset:'リセットの確認',confirmResetText:'すべての資源、生産、テラフォーミングレベル、世代がクリアされます。<br><br>アクションログもリセットされます。',cancel:'キャンセル',resetAction:'リセット',logProduction:'生産',logReserve:'リザーブ',logProduce:'生産',logUndo:'元に戻す',logReset:'リセット — すべて初期値に',logProduceNoChange:'生産 — 変化なし',logNothingToUndo:'元に戻す操作はありません',logConvert:'変換',res_mc:'MC',res_steel:'建材',res_titanium:'チタン',res_plants:'植物',res_energy:'電力',res_heat:'熱',rotateTitle:'デバイスを縦向きにしてください',rotateSub:'このボードは縦向きでの使用を前提としています',exitWarning:'もう一度戻るを押すと終了します',
+    ja:{terraformation:'テラフォーミング',ready:'準備完了',holdToProduce:'長押しで',produce:'生産',logShort:'ログ',reset:'リセット',hold:'長押し',log:'ログ',back:'戻る',options:'オプション',language:'言語',languageHint:'アプリの言語を選択してください。',interfaceModel:'インターフェースモデル',interfaceModelHint:'ボードの表示スタイルを選択してください。',themePanel:'パネル',themeLight:'ライト',themeTerminal:'ターミナル',volumes:'音量',keysVolume:'キー',keysVolumeHint:'ボタンとリザーブ',produceVolume:'生産',produceVolumeHint:'生産エフェクト',screen:'画面',screenHint:'使用中に画面が消えないようにします。',keepScreenOn:'画面をオンのままにする',keepScreenOnHint:'タブが表示されている間有効',loudKeysTitle:'キー音',loudKeysHint:'騒がしい環境向けの誇張された非常に大きなビープ音。',loudKeys:'大音量キー',loudKeysSub:'より大きく鋭い +/- ビープ音',productionSound:'生産サウンド',productionSoundHint:'タップして試聴・選択。次回の生産に適用されます。',noActions:'記録されたアクションはありません',entries:'件',entriesSingular:'件',logSubtitle:'前回の起動またはリセット以降の最新 {n} 件のログが保持されます。',confirmReset:'リセットの確認',confirmResetText:'すべての資源、生産、テラフォーミングレベル、世代がクリアされます。<br><br>アクションログもリセットされます。',cancel:'キャンセル',resetAction:'リセット',logProduction:'生産',logReserve:'リザーブ',logProduce:'生産',logUndo:'元に戻す',logReset:'リセット — すべて初期値に',logProduceNoChange:'生産 — 変化なし',logNothingToUndo:'元に戻す操作はありません',logConvert:'変換',res_mc:'MC',res_steel:'建材',res_titanium:'チタン',res_plants:'植物',res_energy:'電力',res_heat:'熱',rotateTitle:'デバイスを縦向きにしてください',rotateSub:'このボードは縦向きでの使用を前提としています',exitWarning:'もう一度戻るを押すと終了します',
       tileConsumePlants:'{icon} を 8 消費して植生タイルを配置',
       tileConsumeHeat:'{icon} を 8 消費して温度を上昇',
       tileIncTR:'{abbr}を上げる',
@@ -916,6 +1168,8 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       sound:DEFAULT_SOUND, soundVersion:8,
       volumeKeys:DEFAULT_VOLUME, volumeProduce:DEFAULT_VOLUME,
       keepScreenOn:DEFAULT_KEEP_SCREEN_ON,
+      loudKeys:DEFAULT_LOUD_KEYS,
+      theme:DEFAULT_THEME,
       lang:detectLang(),resources:{},log:[]
     };
     RESOURCES.forEach(function(r){s.resources[r.key]={prod:DEFAULT_PROD,reserve:0};});
@@ -940,6 +1194,8 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       s.volumeProduce=safeClamp(s.volumeProduce,0,1,DEFAULT_VOLUME);
       delete s.volume;
       s.keepScreenOn=(typeof s.keepScreenOn==='boolean')?s.keepScreenOn:DEFAULT_KEEP_SCREEN_ON;
+      s.loudKeys=(typeof s.loudKeys==='boolean')?s.loudKeys:DEFAULT_LOUD_KEYS;
+      s.theme=(VALID_THEMES.indexOf(s.theme)>=0)?s.theme:DEFAULT_THEME;
       s.lang=(LANGS.indexOf(s.lang)>=0)?s.lang:detectLang();
       RESOURCES.forEach(function(r){
         var o=s.resources[r.key]||{};
@@ -974,6 +1230,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   var optionsOverlay=document.getElementById('optionsOverlay');
   var soundOptionsEl=document.getElementById('soundOptions');
   var langOptionsEl=document.getElementById('langOptions');
+  var themeOptionsEl=document.getElementById('themeOptions');
   var optKeysMinusEl=document.getElementById('optKeysMinus');
   var optKeysPlusEl=document.getElementById('optKeysPlus');
   var optKeysVolumeValEl=document.getElementById('optKeysVolumeVal');
@@ -983,6 +1240,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   var optProduceVolumeValEl=document.getElementById('optProduceVolumeVal');
   var optProduceIconEl=document.getElementById('optProduceIcon');
   var screenToggleEl=document.getElementById('screenToggle');
+  var loudKeysToggleEl=document.getElementById('loudKeysToggle');
   var confirmOverlay=document.getElementById('confirmOverlay');
   var confirmResetTextEl=document.getElementById('confirmResetText');
   var rotateTitleEl=document.getElementById('rotateTitle');
@@ -1194,6 +1452,25 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     state.keepScreenOn = !state.keepScreenOn;
     save(); updateScreenToggle(); applyWakeLock();
   });
+  function updateLoudKeysToggle(){
+    loudKeysToggleEl.setAttribute('aria-checked', state.loudKeys ? 'true' : 'false');
+  }
+  loudKeysToggleEl.addEventListener('click', function(){
+    ensureAudio();
+    state.loudKeys = !state.loudKeys;
+    save(); updateLoudKeysToggle();
+    if(state.loudKeys) playLoudPlus(); else playResPlus();
+  });
+
+  function applyTheme(){
+    document.body.classList.remove('theme-panel','theme-light','theme-terminal');
+    document.body.classList.add('theme-'+state.theme);
+    var meta=document.querySelector('meta[name="theme-color"]');
+    if(meta){
+      var c = state.theme==='light' ? '#d8d4c8' : (state.theme==='terminal' ? '#000000' : '#0a0a0a');
+      meta.setAttribute('content', c);
+    }
+  }
 
   function tryLockPortrait(){
     try {
@@ -1223,8 +1500,12 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     try{audioCtxLocal=new AC({latencyHint:'playback'});}catch(e){audioCtxLocal=new AC();}
     audioCtx=audioCtxLocal;
 
-    audioLimiter=audioCtx.createGain();
-    audioLimiter.gain.value=1.0;
+    audioLimiter=audioCtx.createDynamicsCompressor();
+    audioLimiter.threshold.value=-2;
+    audioLimiter.knee.value=0;
+    audioLimiter.ratio.value=20;
+    audioLimiter.attack.value=0.001;
+    audioLimiter.release.value=0.05;
     audioLimiter.connect(audioCtx.destination);
 
     audioMaster=audioCtx.createGain();
@@ -1307,7 +1588,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     osc.frequency.setValueAtTime(spec.f0,t);
     if(spec.f1!==undefined)osc.frequency.exponentialRampToValueAtTime(spec.f1,t+spec.dur);
     filt.type=spec.filterType||'lowpass';
-    filt.frequency.value=spec.filterFreq||8000;
+    filt.frequency.value=spec.filterFreq||12000;
     filt.Q.value=spec.filterQ||1;
     var attack=spec.attack||0.002;
     g.gain.setValueAtTime(0,t);
@@ -1352,28 +1633,89 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     osc.stop(t + spec.dur + 0.05);
   }
 
-  function playResPlus(){if(!audioCtx)return;var t=audioCtx.currentTime+0.005;blip(t,{type:'sine',f0:600,dur:0.150,gain:0.16});blip(t,{type:'sine',f0:900,dur:0.100,gain:0.06});}
-  function playResMinus(){if(!audioCtx)return;var t=audioCtx.currentTime+0.005;blip(t,{type:'sine',f0:500,dur:0.150,gain:0.16});blip(t,{type:'sine',f0:350,dur:0.100,gain:0.06});}
-  function playProdPlus(){if(!audioCtx)return;blip(audioCtx.currentTime+0.005,{type:'sawtooth',f0:320,f1:1400,dur:0.110,gain:0.14,filterType:'lowpass',filterFreq:3200,filterQ:5});}
-  function playProdMinus(){if(!audioCtx)return;blip(audioCtx.currentTime+0.005,{type:'sawtooth',f0:1400,f1:320,dur:0.110,gain:0.14,filterType:'lowpass',filterFreq:2400,filterQ:5});}
-  function playTRPlus(){if(!audioCtx)return;blip(audioCtx.currentTime+0.005,{type:'sawtooth',f0:200,f1:460,dur:0.110,gain:0.13,filterType:'lowpass',filterFreq:1700,filterQ:4});}
-  function playTRMinus(){if(!audioCtx)return;blip(audioCtx.currentTime+0.005,{type:'sawtooth',f0:420,f1:180,dur:0.110,gain:0.13,filterType:'lowpass',filterFreq:1400,filterQ:4});}
-
-  /* Cascada ±10 — 4 pitidos escalonados, audibles en altavoz de móvil */
-  function playStepPlus(){
+  /* ============ SONIDOS NORMALES ============ */
+  function playResPlusNormal(){if(!audioCtx)return;var t=audioCtx.currentTime+0.005;blip(t,{type:'sine',f0:600,dur:0.150,gain:0.16});blip(t,{type:'sine',f0:900,dur:0.100,gain:0.06});}
+  function playResMinusNormal(){if(!audioCtx)return;var t=audioCtx.currentTime+0.005;blip(t,{type:'sine',f0:500,dur:0.150,gain:0.16});blip(t,{type:'sine',f0:350,dur:0.100,gain:0.06});}
+  function playProdPlusNormal(){if(!audioCtx)return;blip(audioCtx.currentTime+0.005,{type:'sawtooth',f0:320,f1:1400,dur:0.110,gain:0.14,filterType:'lowpass',filterFreq:3200,filterQ:5});}
+  function playProdMinusNormal(){if(!audioCtx)return;blip(audioCtx.currentTime+0.005,{type:'sawtooth',f0:1400,f1:320,dur:0.110,gain:0.14,filterType:'lowpass',filterFreq:2400,filterQ:5});}
+  function playTRPlusNormal(){if(!audioCtx)return;blip(audioCtx.currentTime+0.005,{type:'sawtooth',f0:200,f1:460,dur:0.110,gain:0.13,filterType:'lowpass',filterFreq:1700,filterQ:4});}
+  function playTRMinusNormal(){if(!audioCtx)return;blip(audioCtx.currentTime+0.005,{type:'sawtooth',f0:420,f1:180,dur:0.110,gain:0.13,filterType:'lowpass',filterFreq:1400,filterQ:4});}
+  function playStepPlusNormal(){
     if(!audioCtx)return;
     var t=audioCtx.currentTime+0.005;
     [640, 740, 840, 940].forEach(function(f, i){
       blip(t + i*0.055, {type:'sine', f0:f, dur:0.055, gain:0.13 - i*0.005});
     });
   }
-  function playStepMinus(){
+  function playStepMinusNormal(){
     if(!audioCtx)return;
     var t=audioCtx.currentTime+0.005;
     [520, 440, 370, 310].forEach(function(f, i){
       blip(t + i*0.055, {type:'sine', f0:f, dur:0.055, gain:0.13 - i*0.005});
     });
   }
+
+  /* ============ SONIDOS EXAGERADOS ============ */
+  function playLoudPlus(){
+    if(!audioCtx)return;
+    var t=audioCtx.currentTime+0.005;
+    var freqs=[1400,1750,2100,2600,3100];
+    for(var i=0;i<freqs.length;i++){
+      var f=freqs[i];
+      var tt=t+i*0.038;
+      blip(tt,{type:'square',f0:f,dur:0.045,gain:0.85,filterFreq:14000,filterQ:1});
+      blip(tt,{type:'sawtooth',f0:f*1.5,dur:0.045,gain:0.35,filterFreq:14000,filterQ:1});
+      blip(tt,{type:'square',f0:f*2,dur:0.030,gain:0.28,filterFreq:14000,filterQ:1});
+    }
+    blip(t+5*0.038,{type:'square',f0:4200,f1:4600,dur:0.11,gain:0.95,filterFreq:16000,filterQ:1});
+  }
+  function playLoudMinus(){
+    if(!audioCtx)return;
+    var t=audioCtx.currentTime+0.005;
+    var freqs=[3400,2900,2450,2000,1550];
+    for(var i=0;i<freqs.length;i++){
+      var f=freqs[i];
+      var tt=t+i*0.038;
+      blip(tt,{type:'sawtooth',f0:f,dur:0.045,gain:0.85,filterFreq:12000,filterQ:1});
+      blip(tt,{type:'square',f0:f*0.5,dur:0.045,gain:0.42,filterFreq:12000,filterQ:1});
+      blip(tt,{type:'sawtooth',f0:f*1.4,dur:0.030,gain:0.22,filterFreq:12000,filterQ:1});
+    }
+    blip(t+5*0.038,{type:'sawtooth',f0:1100,f1:500,dur:0.13,gain:0.90,filterFreq:8000,filterQ:1});
+  }
+  function playLoudCascadePlus(){
+    if(!audioCtx)return;
+    var t=audioCtx.currentTime+0.005;
+    var freqs=[1300,1500,1700,1900,2100,2400,2700];
+    for(var i=0;i<freqs.length;i++){
+      var f=freqs[i];
+      var tt=t+i*0.032;
+      blip(tt,{type:'square',f0:f,dur:0.040,gain:0.85,filterFreq:14000,filterQ:1});
+      blip(tt,{type:'sawtooth',f0:f*1.5,dur:0.040,gain:0.35,filterFreq:14000,filterQ:1});
+    }
+    blip(t+7*0.032,{type:'square',f0:4000,f1:4500,dur:0.12,gain:0.95,filterFreq:16000,filterQ:1});
+  }
+  function playLoudCascadeMinus(){
+    if(!audioCtx)return;
+    var t=audioCtx.currentTime+0.005;
+    var freqs=[3300,2900,2550,2200,1900,1650,1400];
+    for(var i=0;i<freqs.length;i++){
+      var f=freqs[i];
+      var tt=t+i*0.032;
+      blip(tt,{type:'sawtooth',f0:f,dur:0.040,gain:0.85,filterFreq:12000,filterQ:1});
+      blip(tt,{type:'square',f0:f*0.5,dur:0.040,gain:0.42,filterFreq:12000,filterQ:1});
+    }
+    blip(t+7*0.032,{type:'sawtooth',f0:1100,f1:450,dur:0.14,gain:0.90,filterFreq:8000,filterQ:1});
+  }
+
+  /* ============ ENRUTADO ============ */
+  function playResPlus(){ if(state.loudKeys){playLoudPlus();} else {playResPlusNormal();} }
+  function playResMinus(){ if(state.loudKeys){playLoudMinus();} else {playResMinusNormal();} }
+  function playProdPlus(){ if(state.loudKeys){playLoudPlus();} else {playProdPlusNormal();} }
+  function playProdMinus(){ if(state.loudKeys){playLoudMinus();} else {playProdMinusNormal();} }
+  function playTRPlus(){ if(state.loudKeys){playLoudPlus();} else {playTRPlusNormal();} }
+  function playTRMinus(){ if(state.loudKeys){playLoudMinus();} else {playTRMinusNormal();} }
+  function playStepPlus(){ if(state.loudKeys){playLoudCascadePlus();} else {playStepPlusNormal();} }
+  function playStepMinus(){ if(state.loudKeys){playLoudCascadeMinus();} else {playStepMinusNormal();} }
 
   function playDeny(){
     if(!audioCtx)return;
@@ -1562,7 +1904,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     tranceGate: 2.4,
     accelPulse: 2.6,
     throb: 2.0,
-    mechAssembly: 2.6
+    mechAssembly: 2.9
   };
   var RENDER_SAMPLE_RATE = 44100;
 
@@ -1721,6 +2063,7 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     updatePriceLabels();
     renderSoundOptions();
     renderLangOptions();
+    renderThemeOptions();
     if(logOverlay.classList.contains('active'))renderLog();
   }
 
@@ -1744,7 +2087,9 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     optProduceMinusEl.disabled = (pp <= 0);
     optProducePlusEl.disabled = (pp >= 100);
     updateScreenToggle();
+    updateLoudKeysToggle();
     renderLangOptions();
+    renderThemeOptions();
     renderSoundOptions();
   }
   function updateVolumeIcon(el,pct){
@@ -1769,6 +2114,34 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       langOptionsEl.appendChild(btn);
     });
   }
+  function renderThemeOptions(){
+    if(!themeOptionsEl) return;
+    themeOptionsEl.innerHTML='';
+    THEMES.forEach(function(T){
+      var btn=document.createElement('button');
+      btn.type='button';
+      btn.className='theme-option'+(state.theme===T.key?' selected':'');
+      btn.dataset.theme=T.key;
+      var prev=document.createElement('span');
+      prev.className='theme-preview theme-preview-'+T.key;
+      var bar=document.createElement('span');bar.className='tp-bar';
+      var body=document.createElement('span');body.className='tp-body';
+      var c1=document.createElement('span');c1.className='tp-cell';
+      var c2=document.createElement('span');c2.className='tp-cell';
+      body.appendChild(c1);body.appendChild(c2);
+      prev.appendChild(bar);prev.appendChild(body);
+      var label=document.createElement('span');
+      label.className='theme-label';
+      label.textContent=t(T.labelKey);
+      btn.appendChild(prev);btn.appendChild(label);
+      btn.addEventListener('click',function(){
+        if(state.theme===T.key)return;
+        state.theme=T.key;save();applyTheme();renderThemeOptions();
+        ensureAudio();playUI();
+      });
+      themeOptionsEl.appendChild(btn);
+    });
+  }
   function renderSoundOptions(){
     soundOptionsEl.innerHTML='';
     SOUNDS.forEach(function(s){
@@ -1790,10 +2163,6 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
       soundOptionsEl.appendChild(btn);
     });
   }
-
-  
-
-  
 
   function adjustKeysVolume(delta){
     ensureAudio();
@@ -2414,13 +2783,15 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
     actionHistory=[];
     var keptKeys=safeClamp(state.volumeKeys,0,1,DEFAULT_VOLUME);
     var keptProd=safeClamp(state.volumeProduce,0,1,DEFAULT_VOLUME);
-    var keptLang=state.lang,keptSound=state.sound,keptSoundV=state.soundVersion,keptScreen=state.keepScreenOn;
+    var keptLang=state.lang,keptSound=state.sound,keptSoundV=state.soundVersion,keptScreen=state.keepScreenOn,keptLoud=state.loudKeys,keptTheme=state.theme;
     state=defaultState();
     state.volumeKeys=keptKeys;state.volumeProduce=keptProd;
     state.lang=keptLang;state.sound=keptSound;state.soundVersion=keptSoundV;
-    state.keepScreenOn=keptScreen;
+    state.keepScreenOn=keptScreen;state.loudKeys=keptLoud;state.theme=keptTheme;
     applyLanguage();
+    applyTheme();
     updateScreenToggle();
+    updateLoudKeysToggle();
     applyWakeLock();
     trValEl.textContent=state.tr;
     renderGen(false);
@@ -2549,11 +2920,9 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
 
     var now = Date.now();
     if(now - exitWarnedAt < EXIT_TOAST_MS){
-      // Segunda pulsación dentro de la ventana: permitimos salir.
       return;
     }
 
-    // Primera pulsación: avisamos, re-armamos y bloqueamos la salida.
     pushBackTrap();
     showExitToast();
     exitWarnedAt = now;
@@ -2564,8 +2933,10 @@ html,body{height:100%;overflow:hidden;background:#0a0806;color:#fff;font-family:
   buildGrid();
   undoBtn.disabled=true;
 
+  applyTheme();
   applyLanguage();
   updateScreenToggle();
+  updateLoudKeysToggle();
   lastActionEl.textContent=t('ready');
   lastActionKey='ready';
 
